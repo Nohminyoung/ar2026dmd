@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>결합 AR · 제6회 청주대학교 디지털미디어디자인학과 졸업전시회</title>
+<meta name="description" content="포스터를 비추면 졸업전시 포스터 '결합'이 공간에 펼쳐지는 웹 AR">
+<link rel="stylesheet" href="/src/style.css">
+<script src="/vendor/xr/xr.js" async data-preload-chunks="slam"></script>
+</head>
+<body>
+<main id="app" data-state="IDLE">
+  <canvas id="camerafeed" aria-hidden="true"></canvas>
+
+  <section id="intro" class="sheet intro" aria-labelledby="intro-title">
+    <p class="eyebrow">제6회 청주대학교 디지털미디어디자인학과 졸업전시회</p>
+    <h1 id="intro-title" class="wordmark">결합</h1>
+    <p class="lead">포스터를 카메라로 비추면<br>작품이 그 자리에서 공간으로 펼쳐져요.</p>
+    <div id="inapp" class="notice" hidden>
+      <p>이 앱 안의 브라우저에서는 AR이 열리지 않을 수 있어요.<br>아이폰은 <b>Safari</b>, 안드로이드는 <b>Chrome</b>에서 열어 주세요.</p>
+      <div class="row"><code id="page-url"></code><button id="copy-url" class="ghost small" type="button">주소 복사</button></div>
+    </div>
+    <button id="start" class="primary" type="button">AR 시작</button>
+    <div class="load" aria-live="polite">
+      <div class="bar"><span id="load-bar"></span></div>
+      <p id="load-text">작품을 불러오는 중…</p>
+    </div>
+    <p class="fine">카메라와 동작 센서 권한을 물어보면 ‘허용’을 눌러 주세요. 소리는 나지 않아요.</p>
+    <p class="credit">AR 엔진: 8th Wall Engine © Niantic Spatial, Inc. · <a href="/vendor/xr/LICENSE-engine-binary.txt" target="_blank" rel="noopener">라이선스·보증 부인 고지</a></p>
+  </section>
+
+  <div id="hud" class="hud" hidden>
+    <p id="status" class="status" role="status" aria-live="polite">포스터를 찾아보세요</p>
+    <div class="hud-actions">
+      <button id="reset" class="ghost" type="button">위치 다시 맞추기</button>
+      <button id="close" class="icon" type="button" aria-label="AR 끝내기">✕</button>
+    </div>
+  </div>
+
+  <section id="end" class="sheet end" hidden aria-label="체험 끝">
+    <p class="eyebrow">체험이 끝났어요</p>
+    <button id="replay" class="primary" type="button">다시 체험하기</button>
+    <button id="home" class="ghost" type="button">홈페이지 바로 가기</button>
+  </section>
+
+  <section id="error" class="sheet error" hidden role="alert">
+    <p id="error-title" class="title">카메라를 열 수 없어요</p>
+    <p id="error-text" class="lead"></p>
+    <button id="retry" class="primary" type="button">다시 시도</button>
+  </section>
+</main>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

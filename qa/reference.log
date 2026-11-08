@@ -1,0 +1,84 @@
+00:00.414  blend            | Read blend: "/home/claude/webar-project/input/MotionPoster_smooth_v5.blend"
+00:15.937  render           | Saved: '/home/claude/webar-project/qa/reference/ref_001.png'
+00:22.332  render           | Saved: '/home/claude/webar-project/qa/reference/ref_040.png'
+00:22.802  cycles           | WARNING Topology differs, disabling motion blur for object L13 → 팀 02 · 선 01
+00:22.803  cycles           | WARNING Topology differs, disabling motion blur for object L14 → 팀 02 · 선 02
+00:22.803  cycles           | WARNING Topology differs, disabling motion blur for object L15 → 팀 02 · 선 03
+00:22.803  cycles           | WARNING Topology differs, disabling motion blur for object R01 → 팀 08 · 선 10
+00:22.803  cycles           | WARNING Topology differs, disabling motion blur for object R02 → 팀 08 · 선 11
+00:22.803  cycles           | WARNING Topology differs, disabling motion blur for object R03 → 팀 08 · 선 12
+00:22.886  cycles           | WARNING Topology differs, disabling motion blur for object L13 → 팀 02 · 선 01
+00:22.886  cycles           | WARNING Topology differs, disabling motion blur for object L14 → 팀 02 · 선 02
+00:22.886  cycles           | WARNING Topology differs, disabling motion blur for object L15 → 팀 02 · 선 03
+00:22.886  cycles           | WARNING Topology differs, disabling motion blur for object R01 → 팀 08 · 선 10
+00:22.886  cycles           | WARNING Topology differs, disabling motion blur for object R02 → 팀 08 · 선 11
+00:22.886  cycles           | WARNING Topology differs, disabling motion blur for object R03 → 팀 08 · 선 12
+00:29.064  render           | Saved: '/home/claude/webar-project/qa/reference/ref_084.png'
+00:29.527  cycles           | WARNING Topology differs, disabling motion blur for object L01 → 팀 14 · 선 16
+00:29.527  cycles           | WARNING Topology differs, disabling motion blur for object R14 → 팀 17 · 선 22
+00:29.527  cycles           | WARNING Topology differs, disabling motion blur for object R15 → 팀 17 · 선 23
+00:29.527  cycles           | WARNING Topology differs, disabling motion blur for object R01 → 팀 22 · 선 26
+00:29.527  cycles           | WARNING Topology differs, disabling motion blur for object R06 → 팀 39 · 선 42
+00:29.527  cycles           | WARNING Topology differs, disabling motion blur for object R07 → 팀 39 · 선 43
+00:29.527  cycles           | WARNING Topology differs, disabling motion blur for object R17 → 팀 40 · 선 45
+00:29.612  cycles           | WARNING Topology differs, discarding motion blur for object L03 → 팀 14 · 선 18 at time 1
+00:29.612  cycles           | WARNING Topology differs, discarding motion blur for object R03 → 팀 22 · 선 28 at time 1
+00:29.612  cycles           | WARNING Topology differs, discarding motion blur for object R16 → 팀 40 · 선 44 at time 1
+00:29.613  cycles           | WARNING Topology differs, discarding motion blur for object L16 → 팀 41 · 선 46 at time 1
+00:37.113  render           | Saved: '/home/claude/webar-project/qa/reference/ref_140.png'
+00:37.800  cycles           | WARNING Topology differs, disabling motion blur for object L03 위성 → 글자 · 실선 008
+00:37.800  cycles           | WARNING Topology differs, disabling motion blur for object L06 위성 → 글자 · 실선 015
+00:37.800  cycles           | WARNING Topology differs, disabling motion blur for object L12 위성 → 글자 · 실선 032
+00:37.801  cycles           | WARNING Topology differs, disabling motion blur for object R06 위성 → 글자 · 실선 060
+00:37.801  cycles           | WARNING Topology differs, disabling motion blur for object R15 위성 → 글자 · 실선 086
+00:37.910  cycles           | WARNING Topology differs, disabling motion blur for object L01 위성 → 글자 · 실선 002
+00:37.910  cycles           | WARNING Topology differs, disabling motion blur for object L02 위성 → 글자 · 실선 005
+00:37.910  cycles           | WARNING Topology differs, disabling motion blur for object L12 위성 → 글자 · 실선 032
+00:37.910  cycles           | WARNING Topology differs, discarding motion blur for object L13 위성 → 글자 · 실선 035 at time 1
+00:37.910  cycles           | WARNING Topology differs, disabling motion blur for object L15 위성 → 글자 · 실선 041
+00:37.910  cycles           | WARNING Topology differs, discarding motion blur for object R01 위성 → 글자 · 실선 047 at time 1
+00:37.911  cycles           | WARNING Topology differs, disabling motion blur for object R05 위성 → 글자 · 실선 056
+00:37.911  cycles           | WARNING Topology differs, disabling motion blur for object R07 위성 → 글자 · 실선 062
+00:37.911  cycles           | WARNING Topology differs, discarding motion blur for object R10 위성 → 글자 · 실선 070 at time 1
+00:37.911  cycles           | WARNING Topology differs, discarding motion blur for object R13 위성 → 글자 · 실선 080 at time 1
+00:45.581  render           | Saved: '/home/claude/webar-project/qa/reference/ref_196.png'
+00:46.230  cycles           | WARNING Topology differs, disabling motion blur for object R10 위성 → 글자 · 실선 072
+00:46.231  cycles           | WARNING Topology differs, disabling motion blur for object 팀 별자리 07
+00:46.342  cycles           | WARNING Topology differs, discarding motion blur for object R16 위성 → 글자 · 실선 089 at time 1
+00:46.343  cycles           | WARNING Topology differs, discarding motion blur for object 팀 별자리 05 at time 1
+00:46.343  cycles           | WARNING Topology differs, discarding motion blur for object 팀 별자리 06 at time 1
+00:46.343  cycles           | WARNING Topology differs, disabling motion blur for object 팀 별자리 07
+00:54.114  render           | Saved: '/home/claude/webar-project/qa/reference/ref_215.png'
+00:54.767  cycles           | WARNING Topology differs, disabling motion blur for object L04 위성 → 글자 · 실선 011
+00:54.768  cycles           | WARNING Topology differs, disabling motion blur for object L05 위성 → 글자 · 실선 013
+00:54.768  cycles           | WARNING Topology differs, disabling motion blur for object L06 위성 → 글자 · 실선 015
+00:54.768  cycles           | WARNING Topology differs, disabling motion blur for object L11 위성 → 글자 · 실선 029
+00:54.769  cycles           | WARNING Topology differs, disabling motion blur for object R04 위성 → 글자 · 실선 054
+00:54.769  cycles           | WARNING Topology differs, disabling motion blur for object R06 위성 → 글자 · 실선 060
+00:54.769  cycles           | WARNING Topology differs, disabling motion blur for object R07 위성 → 글자 · 실선 063
+00:54.770  cycles           | WARNING Topology differs, disabling motion blur for object R09 위성 → 글자 · 실선 068
+00:54.770  cycles           | WARNING Topology differs, disabling motion blur for object R10 위성 → 글자 · 실선 070
+00:54.770  cycles           | WARNING Topology differs, disabling motion blur for object R11 위성 → 글자 · 실선 074
+00:54.770  cycles           | WARNING Topology differs, disabling motion blur for object R12 위성 → 글자 · 실선 077
+00:54.770  cycles           | WARNING Topology differs, disabling motion blur for object 팀 별자리 02
+00:54.853  cycles           | WARNING Topology differs, discarding motion blur for object L02 위성 → 글자 · 실선 005 at time 1
+00:54.854  cycles           | WARNING Topology differs, discarding motion blur for object L03 위성 → 글자 · 실선 008 at time 1
+00:54.854  cycles           | WARNING Topology differs, disabling motion blur for object L05 위성 → 글자 · 실선 013
+00:54.854  cycles           | WARNING Topology differs, discarding motion blur for object L09 위성 → 글자 · 실선 023 at time 1
+00:54.854  cycles           | WARNING Topology differs, discarding motion blur for object L12 위성 → 글자 · 실선 033 at time 1
+00:54.855  cycles           | WARNING Topology differs, discarding motion blur for object L13 위성 → 글자 · 실선 035 at time 1
+00:54.855  cycles           | WARNING Topology differs, discarding motion blur for object R01 위성 → 글자 · 실선 047 at time 1
+00:54.855  cycles           | WARNING Topology differs, discarding motion blur for object R01 위성 → 글자 · 실선 048 at time 1
+00:54.855  cycles           | WARNING Topology differs, discarding motion blur for object R06 위성 → 글자 · 실선 059 at time 1
+00:54.855  cycles           | WARNING Topology differs, disabling motion blur for object R06 위성 → 글자 · 실선 060
+00:54.856  cycles           | WARNING Topology differs, disabling motion blur for object R10 위성 → 글자 · 실선 070
+00:54.856  cycles           | WARNING Topology differs, discarding motion blur for object R10 위성 → 글자 · 실선 071 at time 1
+00:54.856  cycles           | WARNING Topology differs, discarding motion blur for object R13 위성 → 글자 · 실선 080 at time 1
+00:54.856  cycles           | WARNING Topology differs, discarding motion blur for object R15 위성 → 글자 · 실선 086 at time 1
+00:54.856  cycles           | WARNING Topology differs, discarding motion blur for object 팀 별자리 01 at time 1
+00:54.857  cycles           | WARNING Topology differs, discarding motion blur for object 팀 별자리 03 at time 1
+00:54.857  cycles           | WARNING Topology differs, discarding motion blur for object 팀 별자리 04 at time 1
+01:02.814  render           | Saved: '/home/claude/webar-project/qa/reference/ref_255.png'
+01:08.444  render           | Saved: '/home/claude/webar-project/qa/reference/ref_290.png'
+01:13.071  render           | Saved: '/home/claude/webar-project/qa/reference/ref_325.png'
+REF DONE

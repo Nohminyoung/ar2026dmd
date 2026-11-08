@@ -1,0 +1,18 @@
+{
+ "blenderPoster": "public/assets/poster.jpg",
+ "finalPrint": "input/poster_final_1200.png",
+ "matches": 2682,
+ "inliers": 2176,
+ "scale": 1.0052043046775363,
+ "rotationDeg": -0.0002992780932121208,
+ "offset": [
+  -5.044056179287493e-05,
+  -0.0002958973250269992
+ ],
+ "residualPx": {
+  "median": 0.1047501389059099,
+  "p90": 0.2312050199753478
+ },
+ "finalPrintAspect": 1.5,
+ "meaning": "artwork point p (Blender units, poster width 1) -> print point = offset + scale * p, in print widths, centered, y up"
+}

@@ -1,0 +1,24 @@
+00:00.382  blend            | Read blend: "/home/claude/webar-project/input/MotionPoster_smooth_v5.blend"
+bodies 3169 tips 80 lines 187 frames 325
+  geo 0/3169 verts 1366 0s
+  geo 500/3169 verts 433696 4s
+  geo 1000/3169 verts 904669 8s
+  geo 1500/3169 verts 1354215 12s
+  geo 2000/3169 verts 1846513 16s
+  geo 2500/3169 verts 2288117 20s
+  geo 3000/3169 verts 2664007 24s
+bodies geo: verts 2776491 tris 4304736 bytes 73.2MB 25s
+  frame 1 (1/325) 26s
+  frame 26 (26/325) 28s
+  frame 51 (51/325) 31s
+  frame 76 (76/325) 33s
+  frame 101 (101/325) 36s
+  frame 126 (126/325) 39s
+  frame 151 (151/325) 42s
+  frame 176 (176/325) 44s
+  frame 201 (201/325) 47s
+  frame 226 (226/325) 50s
+  frame 251 (251/325) 52s
+  frame 276 (276/325) 55s
+  frame 301 (301/325) 58s
+EXPORT OK 62s -> /home/claude/webar-project/public/assets

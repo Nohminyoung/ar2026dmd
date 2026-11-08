@@ -1,0 +1,31 @@
+{
+  "targetName": "poster-target",
+  "targetJsonUrl": "/image-targets/poster-target.json",
+  "markerImageUrl": "/image-targets/poster-target_cropped.png",
+  "isTestMarker": false,
+  "markerSource": "input/poster_final_RGB.pdf (600 x 900 mm document) rasterized 1200 x 1800, CLI default centered 3:4 crop (top 100, height 1600)",
+  "homepageUrl": "https://www.dmd2026.com/",
+  "productionUrl": null,
+  "plannedProductionUrl": "https://ar.dmd2026.com/",
+  "markerPhysicalWidth": null,
+  "markerPhysicalHeight": null,
+  "markerPhysicalNote": "Not needed: the poster itself is the target; the artwork is scaled from the detected target width. PDF document size is 600 x 900 mm, actual print size unconfirmed.",
+  "artworkReferenceWidth": 1.0,
+  "markerToArtwork": {
+    "position": [-0.00005, -0.0003, 0.0],
+    "rotationDeg": [0, 0, 0],
+    "scale": 1.0052,
+    "source": "scripts/fit-alignment.py: SIFT/RANSAC fit of the Blender poster onto the final print, 2176 inliers, median residual 0.1 px. Crop center = print center."
+  },
+  "anchor": {
+    "stableWindowMs": 650,
+    "minSamples": 3,
+    "maxSampleGapMs": 250,
+    "maxWidthChange": 0.05,
+    "maxPositionChangeOfWidth": 0.03,
+    "maxRotationChangeDeg": 10,
+    "minViewDistanceInPosterWidths": 1.6,
+    "trackingLostResetHintMs": 8000
+  },
+  "render": { "maxPixelRatio": 1.5 }
+}

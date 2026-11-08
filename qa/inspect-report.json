@@ -1,0 +1,1047 @@
+{
+ "blenderVersion": "5.2.3 LTS",
+ "fileVersion": [
+  5,
+  2,
+  45
+ ],
+ "file": "MotionPoster_smooth_v5.blend",
+ "sha256": "3e2cbf05e95ab2f0d9258ddd2cafa295c3fd69819e58cedf427c12f9ebb77837",
+ "scene": {
+  "name": "결합 V5 FINAL — 상승 · 연결 · 포스터 복귀",
+  "frameStart": 1,
+  "frameEnd": 325,
+  "fps": 30,
+  "fpsBase": 1.0,
+  "timeRemap": {
+   "old": 120,
+   "new": 100
+  },
+  "resolution": [
+   720,
+   1280,
+   100
+  ],
+  "engine": "CYCLES",
+  "motionBlur": true,
+  "unitSystem": "METRIC",
+  "scaleLength": 0.593999981880188,
+  "camera": "정면 카메라 · 확정 영상 구도",
+  "customProps": {
+   "version": "5.8 획 밀도 균형 보강",
+   "source_input_sha256": "{\"public/assets/team-assembly.json\": \"db7a4dbd254561818780855746e6c3ebfde267c8e06f77f963e30f6bd5dd992a\", \"public/solid-icons.js\": \"36efa905ee7c0edb3215a1629386477dbbb61bb0dff1f2c068e64dedd713d648\", \"public/satellite-motion.js\": \"e919329a2129ff24dcb3362f48e03c6a6c401eb73fc4c1f84444296b6e19fc7d\", \"public/rhythm-design.js\": \"23c49414e1baae9b07359dd72d8e9659d1af5447dfa372669c26be99e4e55a07\", \"public/connection-lines.js\": \"efa38a1d2b6e7d968be0e096ce5cd82a1d43ad1e3d287ebe7cae9035e5041557\", \"public/float-motion.js\": \"4f7ca95caaa4ae8560436295082be3a4c2bff5c5b2a4161e5d46737d552a8a3d\", \"public/assets/poster.jpg\": \"4c78517012ce17a2baed1681574629edd224164a545f53fa6f91069a69639e73\", \"public/assets/textures/source-atlas.png\": \"2524bc8a4f26f52d5052c816b76322aeae87ac2eef6b320fac7bd434258a65d2\"}",
+   "source_poster_units": "Scene width 1.0 = A1 poster width 594 mm. Web model coordinates retained, not rescaled.",
+   "runtime_limits": "[\"Baked deterministic timeline, not interactive Blender input\", \"Blender lighting approximates WebGL; packed sRGB atlas, identical UVs and rounded geometry; source saturation 1\", \"80 native editable Bezier curves with parametric trimmed control points, animated opacity and traveling tips; static poster retained\"]",
+   "motion_export": "blender/export-v5",
+   "sampled_frames": 390,
+   "letter_scale": 1.6,
+   "depth": 2,
+   "source_body_groups": 3169,
+   "source_guide_groups": 0,
+   "display_saturation": 1,
+   "source_connections": 80,
+   "confirmed_teams": 14,
+   "confirmed_students": 33,
+   "approved_revision": "5.6.0",
+   "geometry_revision": "5.8.0",
+   "sequence_seconds": 13
+  },
+  "markers": [
+   [
+    1,
+    "포스터에서 등장"
+   ],
+   [
+    99,
+    "2개 결합 · 결1 합1"
+   ],
+   [
+    131,
+    "4개 결합 · 결2 합2"
+   ],
+   [
+    163,
+    "6개 결합"
+   ],
+   [
+    193,
+    "8개 결합"
+   ],
+   [
+    213,
+    "전체 확대 겹침"
+   ],
+   [
+    223,
+    "전체 연결 시작"
+   ],
+   [
+    258,
+    "14팀 동시 완성"
+   ],
+   [
+    305,
+    "전체 동시 복귀"
+   ],
+   [
+    383,
+    "포스터만 남음"
+   ]
+  ]
+ },
+ "camera": {
+  "type": "PERSP",
+  "lens": 43.95964050292969,
+  "sensor": [
+   36.0,
+   32.0,
+   "VERTICAL"
+  ],
+  "location": [
+   0.0,
+   0.0,
+   6.25
+  ],
+  "rotationEuler": [
+   0.0,
+   -0.0,
+   0.0
+  ]
+ },
+ "collections": {
+  "name": "Scene Collection",
+  "objects": 0,
+  "hideRender": false,
+  "children": [
+   {
+    "name": "01 결합 글자 · 원본 메시",
+    "objects": 1,
+    "hideRender": false,
+    "children": [
+     {
+      "name": "깊이 레이어 1",
+      "objects": 470,
+      "hideRender": false,
+      "children": []
+     },
+     {
+      "name": "깊이 레이어 2",
+      "objects": 448,
+      "hideRender": false,
+      "children": []
+     },
+     {
+      "name": "깊이 레이어 3",
+      "objects": 429,
+      "hideRender": false,
+      "children": []
+     },
+     {
+      "name": "깊이 레이어 4",
+      "objects": 456,
+      "hideRender": false,
+      "children": []
+     },
+     {
+      "name": "깊이 레이어 5",
+      "objects": 379,
+      "hideRender": false,
+      "children": []
+     },
+     {
+      "name": "가독성 보강 · 434개",
+      "objects": 0,
+      "hideRender": false,
+      "children": [
+       {
+        "name": "이전 보강 308개 · 깊이 재배치 40개 포함",
+        "objects": 0,
+        "hideRender": false,
+        "children": [
+         {
+          "name": "결 ㅕ · 100개",
+          "objects": 100,
+          "hideRender": false,
+          "children": []
+         },
+         {
+          "name": "합 ㅎ 윗획 · 28개",
+          "objects": 28,
+          "hideRender": false,
+          "children": []
+         },
+         {
+          "name": "합 ㅎ 가로획 · 68개",
+          "objects": 68,
+          "hideRender": false,
+          "children": []
+         },
+         {
+          "name": "합 ㅏ · 112개",
+          "objects": 112,
+          "hideRender": false,
+          "children": []
+         }
+        ]
+       },
+       {
+        "name": "표시 영역 보강 · 126개",
+        "objects": 0,
+        "hideRender": false,
+        "children": [
+         {
+          "name": "ㄱ 상단 · 24개",
+          "objects": 24,
+          "hideRender": false,
+          "children": []
+         },
+         {
+          "name": "ㅕ 윗가로획 · 12개",
+          "objects": 12,
+          "hideRender": false,
+          "children": []
+         },
+         {
+          "name": "ㅕ 아래가로획 · 12개",
+          "objects": 12,
+          "hideRender": false,
+          "children": []
+         },
+         {
+          "name": "ㅎ 윗획 · 10개",
+          "objects": 10,
+          "hideRender": false,
+          "children": []
+         },
+         {
+          "name": "ㅎ 접합부 · 8개",
+          "objects": 8,
+          "hideRender": false,
+          "children": []
+         },
+         {
+          "name": "ㅏ 돌출부 · 16개",
+          "objects": 16,
+          "hideRender": false,
+          "children": []
+         },
+         {
+          "name": "ㅂ 왼쪽 접합 · 14개",
+          "objects": 14,
+          "hideRender": false,
+          "children": []
+         },
+         {
+          "name": "ㅂ 오른쪽 세로획 · 30개",
+          "objects": 30,
+          "hideRender": false,
+          "children": []
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "02 학생 33명 · 좌우 개인 아이콘",
+    "objects": 0,
+    "hideRender": false,
+    "children": [
+     {
+      "name": "왼쪽 L · 16명",
+      "objects": 16,
+      "hideRender": false,
+      "children": []
+     },
+     {
+      "name": "오른쪽 R · 17명",
+      "objects": 17,
+      "hideRender": false,
+      "children": []
+     }
+    ]
+   },
+   {
+    "name": "03 부유 위성 388개",
+    "objects": 388,
+    "hideRender": false,
+    "children": []
+   },
+   {
+    "name": "04 팀 결합 · 원본 맞물림",
+    "objects": 0,
+    "hideRender": false,
+    "children": [
+     {
+      "name": "T01 OMIX",
+      "objects": 0,
+      "hideRender": false,
+      "children": [
+       {
+        "name": "원위치 보존 · 인스턴스 00 · Z5",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "중간 결합 · 인스턴스 14 · Z4",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "중간 결합 · 인스턴스 42 · Z2",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "최종 동시 결합 · 인스턴스 56 · Z1",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       }
+      ]
+     },
+     {
+      "name": "T02 읽꼬",
+      "objects": 0,
+      "hideRender": false,
+      "children": [
+       {
+        "name": "원위치 보존 · 인스턴스 01 · Z5",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "원위치 보존 · 인스턴스 15 · Z4",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "최종 동시 결합 · 인스턴스 29 · Z3",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "중간 결합 · 인스턴스 57 · Z1",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       }
+      ]
+     },
+     {
+      "name": "T03 다들림",
+      "objects": 0,
+      "hideRender": false,
+      "children": [
+       {
+        "name": "중간 결합 · 인스턴스 02 · Z5",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "최종 동시 결합 · 인스턴스 16 · Z4",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "원위치 보존 · 인스턴스 30 · Z3",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "중간 결합 · 인스턴스 58 · Z1",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       }
+      ]
+     },
+     {
+      "name": "T04 28수",
+      "objects": 0,
+      "hideRender": false,
+      "children": [
+       {
+        "name": "중간 결합 · 인스턴스 03 · Z5",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "중간 결합 · 인스턴스 17 · Z4",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "원위치 보존 · 인스턴스 31 · Z3",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "최종 동시 결합 · 인스턴스 59 · Z1",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       }
+      ]
+     },
+     {
+      "name": "T05 아푸치카",
+      "objects": 0,
+      "hideRender": false,
+      "children": [
+       {
+        "name": "원위치 보존 · 인스턴스 04 · Z5",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "원위치 보존 · 인스턴스 32 · Z3",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "중간 결합 · 인스턴스 46 · Z2",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "최종 동시 결합 · 인스턴스 60 · Z1",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       }
+      ]
+     },
+     {
+      "name": "T06 E.FACT",
+      "objects": 0,
+      "hideRender": false,
+      "children": [
+       {
+        "name": "중간 결합 · 인스턴스 05 · Z5",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "최종 동시 결합 · 인스턴스 33 · Z3",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "중간 결합 · 인스턴스 47 · Z2",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "원위치 보존 · 인스턴스 61 · Z1",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       }
+      ]
+     },
+     {
+      "name": "T08 Stylens",
+      "objects": 0,
+      "hideRender": false,
+      "children": [
+       {
+        "name": "중간 결합 · 인스턴스 07 · Z5",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "원위치 보존 · 인스턴스 49 · Z2",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "최종 동시 결합 · 인스턴스 63 · Z1",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       }
+      ]
+     },
+     {
+      "name": "T09 CURO",
+      "objects": 0,
+      "hideRender": false,
+      "children": [
+       {
+        "name": "중간 결합 · 인스턴스 08 · Z5",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "중간 결합 · 인스턴스 22 · Z4",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "최종 동시 결합 · 인스턴스 50 · Z2",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       }
+      ]
+     },
+     {
+      "name": "T10 피싱뚝",
+      "objects": 0,
+      "hideRender": false,
+      "children": [
+       {
+        "name": "중간 결합 · 인스턴스 09 · Z5",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "최종 동시 결합 · 인스턴스 37 · Z3",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "원위치 보존 · 인스턴스 65 · Z1",
+        "objects": 3,
+        "hideRender": false,
+        "children": []
+       }
+      ]
+     },
+     {
+      "name": "T11 처마",
+      "objects": 0,
+      "hideRender": false,
+      "children": [
+       {
+        "name": "원위치 보존 · 인스턴스 10 · Z5",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "최종 동시 결합 · 인스턴스 24 · Z4",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "중간 결합 · 인스턴스 52 · Z2",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       }
+      ]
+     },
+     {
+      "name": "T07 COCOLANG",
+      "objects": 0,
+      "hideRender": false,
+      "children": [
+       {
+        "name": "최종 동시 결합 · 인스턴스 20 · Z4",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "원위치 보존 · 인스턴스 48 · Z2",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "중간 결합 · 인스턴스 62 · Z1",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       }
+      ]
+     },
+     {
+      "name": "T12 YEAR:ON",
+      "objects": 0,
+      "hideRender": false,
+      "children": [
+       {
+        "name": "최종 동시 결합 · 인스턴스 25 · Z4",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "중간 결합 · 인스턴스 39 · Z3",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "원위치 보존 · 인스턴스 53 · Z2",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       }
+      ]
+     },
+     {
+      "name": "T13 마그모아",
+      "objects": 0,
+      "hideRender": false,
+      "children": [
+       {
+        "name": "원위치 보존 · 인스턴스 26 · Z4",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "중간 결합 · 인스턴스 40 · Z3",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "최종 동시 결합 · 인스턴스 54 · Z2",
+        "objects": 2,
+        "hideRender": false,
+        "children": []
+       }
+      ]
+     },
+     {
+      "name": "L16 직지잼버리",
+      "objects": 0,
+      "hideRender": false,
+      "children": [
+       {
+        "name": "최종 동시 결합 · 인스턴스 27 · Z4",
+        "objects": 5,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "중간 결합 · 인스턴스 41 · Z3",
+        "objects": 5,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "원위치 보존 · 인스턴스 55 · Z2",
+        "objects": 5,
+        "hideRender": false,
+        "children": []
+       },
+       {
+        "name": "중간 결합 · 인스턴스 69 · Z1",
+        "objects": 5,
+        "hideRender": false,
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "06 포스터 · 정면 카메라 · 조명",
+    "objects": 4,
+    "hideRender": false,
+    "children": []
+   },
+   {
+    "name": "05 연결선 80개 · 성장과 디졸브",
+    "objects": 0,
+    "hideRender": false,
+    "children": [
+     {
+      "name": "중간 연결 · 47개",
+      "objects": 94,
+      "hideRender": false,
+      "children": []
+     },
+     {
+      "name": "마지막 전체 연결 · 33개",
+      "objects": 66,
+      "hideRender": false,
+      "children": []
+     },
+     {
+      "name": "추가 · 위성 실선 93개 · 학생별 위성 → 본인 글자 조각",
+      "objects": 93,
+      "hideRender": false,
+      "children": []
+     },
+     {
+      "name": "추가 · 팀 별자리 14개 · 최종 결합 위치 고리",
+      "objects": 14,
+      "hideRender": false,
+      "children": []
+     }
+    ]
+   },
+   {
+    "name": "◆ 선 움직임 조절 · 그래프 편집기에서 수정",
+    "objects": 2,
+    "hideRender": false,
+    "children": []
+   }
+  ]
+ },
+ "objectTypes": {
+  "CURVE": 189,
+  "MESH": 3250,
+  "LIGHT": 2,
+  "EMPTY": 1,
+  "CAMERA": 1
+ },
+ "objectCustomProps": {
+  "connection_index": 80,
+  "source_icon": 80,
+  "target_icon": 80,
+  "launch_seconds": 80,
+  "arrival_seconds": 80,
+  "export_kind": 3169,
+  "export_index": 3169,
+  "sourceGroup": 3169,
+  "initial_satellite": 3169,
+  "source_components": 3169,
+  "source_metadata": 3169,
+  "geometry": 3169,
+  "bevel_segments": 3169,
+  "bevel_size_normalized": 3169,
+  "texture_source": 3169,
+  "optional": 1,
+  "connection_tip": 80
+ },
+ "exportKinds": {
+  "body": 3169
+ },
+ "meshes": {
+  "objects": 3250,
+  "uniqueMeshData": 3250,
+  "vertices": 2778492,
+  "triangles": 4308578,
+  "uvLayers": {
+   "Source atlas UV": 3169,
+   "Poster UV": 1,
+   "UVMap": 80
+  },
+  "colorAttributes": {
+   "Personal RGB:CORNER:FLOAT_COLOR": 3169
+  }
+ },
+ "curves": {
+  "count": 189,
+  "withConnectionIndex": 80,
+  "controlObjects": [
+   "◆ 사라지는 곡선",
+   "◆ 자라는 곡선"
+  ],
+  "byCollection": {
+   "중간 연결 · 47개": 47,
+   "마지막 전체 연결 · 33개": 33,
+   "추가 · 위성 실선 93개 · 학생별 위성 → 본인 글자 조각": 93,
+   "◆ 선 움직임 조절 · 그래프 편집기에서 수정": 2,
+   "추가 · 팀 별자리 14개 · 최종 결합 위치 고리": 14
+  },
+  "sample": [
+   {
+    "name": "L01 → 팀 14 · 선 16",
+    "splines": 1,
+    "points": [
+     2
+    ],
+    "bevelDepth": 0.0006500000017695129,
+    "mapping": [
+     "SPLINE",
+     "SPLINE"
+    ],
+    "objectAnim": {
+     "action": "연결 16 · 원본 BezierAction",
+     "paths": [
+      "hide_render",
+      "hide_viewport",
+      "splines[0].bezier_points[0].co",
+      "splines[0].bezier_points[0].handle_left",
+      "splines[0].bezier_points[0].handle_right",
+      "splines[0].bezier_points[1].co",
+      "splines[0].bezier_points[1].handle_left",
+      "splines[0].bezier_points[1].handle_right"
+     ],
+     "keys": 390
+    },
+    "dataAnim": {
+     "action": "연결 16 · 원본 BezierAction",
+     "paths": [
+      "hide_render",
+      "hide_viewport",
+      "splines[0].bezier_points[0].co",
+      "splines[0].bezier_points[0].handle_left",
+      "splines[0].bezier_points[0].handle_right",
+      "splines[0].bezier_points[1].co",
+      "splines[0].bezier_points[1].handle_left",
+      "splines[0].bezier_points[1].handle_right"
+     ],
+     "keys": 390,
+     "nla": [
+      {
+       "track": "사라지기 (◆ 사라지는 곡선)",
+       "strips": [
+        [
+         "◆ 사라지는 곡선",
+         182.0,
+         232.0,
+         0.833
+        ]
+       ]
+      },
+      {
+       "track": "자라기 (◆ 자라는 곡선)",
+       "strips": [
+        [
+         "◆ 자라는 곡선",
+         164.0,
+         200.0,
+         0.6
+        ]
+       ]
+      }
+     ]
+    },
+    "materials": [
+     "선 16 · 실제 알파"
+    ]
+   },
+   {
+    "name": "L01 → 팀 42 · 선 47",
+    "splines": 1,
+    "points": [
+     2
+    ],
+    "bevelDepth": 0.0006500000017695129,
+    "mapping": [
+     "SPLINE",
+     "SPLINE"
+    ],
+    "objectAnim": {
+     "action": "연결 47 · 원본 BezierAction",
+     "paths": [
+      "hide_render",
+      "hide_viewport",
+      "splines[0].bezier_points[0].co",
+      "splines[0].bezier_points[0].handle_left",
+      "splines[0].bezier_points[0].handle_right",
+      "splines[0].bezier_points[1].co",
+      "splines[0].bezier_points[1].handle_left",
+      "splines[0].bezier_points[1].handle_right"
+     ],
+     "keys": 390
+    },
+    "dataAnim": {
+     "action": "연결 47 · 원본 BezierAction",
+     "paths": [
+      "hide_render",
+      "hide_viewport",
+      "splines[0].bezier_points[0].co",
+      "splines[0].bezier_points[0].handle_left",
+      "splines[0].bezier_points[0].handle_right",
+      "splines[0].bezier_points[1].co",
+      "splines[0].bezier_points[1].handle_left",
+      "splines[0].bezier_points[1].handle_right"
+     ],
+     "keys": 390,
+     "nla": [
+      {
+       "track": "사라지기 (◆ 사라지는 곡선)",
+       "strips": [
+        [
+         "◆ 사라지는 곡선",
+         212.0,
+         262.0,
+         0.833
+        ]
+       ]
+      },
+      {
+       "track": "자라기 (◆ 자라는 곡선)",
+       "strips": [
+        [
+         "◆ 자라는 곡선",
+         194.0,
+         230.0,
+         0.6
+        ]
+       ]
+      }
+     ]
+    },
+    "materials": [
+     "선 47 · 실제 알파"
+    ]
+   },
+   {
+    "name": "L01 위성 → 글자 · 실선 001",
+    "splines": 1,
+    "points": [
+     2
+    ],
+    "bevelDepth": 0.00048502752906642854,
+    "mapping": [
+     "SPLINE",
+     "SPLINE"
+    ],
+    "objectAnim": {
+     "action": "L01 위성 → 글자 · 실선 001 · 표시",
+     "paths": [
+      "hide_render",
+      "hide_viewport"
+     ],
+     "keys": 390
+    },
+    "dataAnim": {
+     "action": "L01 위성 → 글자 · 실선 001 · 성장",
+     "paths": [
+      "splines[0].bezier_points[0].co",
+      "splines[0].bezier_points[0].handle_left",
+      "splines[0].bezier_points[0].handle_right",
+      "splines[0].bezier_points[1].co",
+      "splines[0].bezier_points[1].handle_left",
+      "splines[0].bezier_points[1].handle_right"
+     ],
+     "keys": 390,
+     "nla": [
+      {
+       "track": "자라기 (◆ 자라는 곡선)",
+       "strips": [
+        [
+         "◆ 자라는 곡선",
+         243.0,
+         307.0,
+         1.067
+        ]
+       ]
+      },
+      {
+       "track": "사라지기 (◆ 사라지는 곡선)",
+       "strips": [
+        [
+         "◆ 사라지는 곡선",
+         312.0,
+         372.0,
+         1.0
+        ]
+       ]
+      }
+     ]
+    },
+    "materials": [
+     "위성 실선 001 · 알파"
+    ]
+   },
+   {
+    "name": "◆ 사라지는 곡선",
+    "splines": 0,
+    "points": [],
+    "bevelDepth": 0.0,
+    "mapping": [
+     "RESOLUTION",
+     "RESOLUTION"
+    ],
+    "objectAnim": null,
+    "dataAnim": {
+     "action": "◆ 사라지는 곡선",
+     "paths": [
+      "bevel_factor_start"
+     ],
+     "keys": 2
+    },
+    "materials": []
+   }
+  ]
+ },
+ "connectionTips": 80,
+ "materials": {
+  "count": 411,
+  "animatedNodeTrees": 252,
+  "nodes": {
+   "OUTPUT_MATERIAL": 411,
+   "EMISSION": 255,
+   "BSDF_TRANSPARENT": 254,
+   "Animated opacity": 254,
+   "TEX_IMAGE": 157,
+   "BSDF_PRINCIPLED": 156,
+   "VERTEX_COLOR": 92,
+   "Personal mix from approved motion": 92
+  }
+ },
+ "images": [
+  {
+   "name": "poster.jpg",
+   "size": [
+    1272,
+    1800
+   ],
+   "source": "FILE",
+   "packed": true,
+   "filepath": "//../../public/assets/poster.jpg",
+   "colorspace": "sRGB",
+   "extracted": "qa/packed/poster.jpg",
+   "bytes": 1710990,
+   "sha256": "4c78517012ce17a2baed1681574629edd224164a545f53fa6f91069a69639e73"
+  },
+  {
+   "name": "원본 포스터 색상 아틀라스 · 파일 내부 포함",
+   "size": [
+    2048,
+    2048
+   ],
+   "source": "FILE",
+   "packed": true,
+   "filepath": "//../../public/assets/textures/source-atlas.png",
+   "colorspace": "sRGB",
+   "extracted": "qa/packed/원본_포스터_색상_아틀라스___파일_내부_포함.png",
+   "bytes": 191385,
+   "sha256": "2524bc8a4f26f52d5052c816b76322aeae87ac2eef6b320fac7bd434258a65d2"
+  }
+ ],
+ "animation": {
+  "objectsWithAction": 3436,
+  "objectsWithHideRenderAnim": 267,
+  "curveDataWithNLA": 187,
+  "actions": 3797,
+  "parents": {
+   "전체 애니메이션 · 좌표 기준": 3169,
+   "null": 274
+  },
+  "rootEmptyIsIdentity": true
+ },
+ "texts": [
+  "수정 내역 · smooth",
+  "처음 읽기 · V5 확정본"
+ ]
+}

@@ -1,0 +1,8 @@
+frame 1 t=0s meanAbsDiff=1.5 silhouetteIoU=0.914
+frame 40 t=1.3s meanAbsDiff=2.5 silhouetteIoU=0.968
+frame 84 t=2.767s meanAbsDiff=5.1 silhouetteIoU=0.892
+frame 140 t=4.633s meanAbsDiff=5.6 silhouetteIoU=0.903
+frame 215 t=7.133s meanAbsDiff=5.8 silhouetteIoU=0.938
+frame 255 t=8.467s meanAbsDiff=5.9 silhouetteIoU=0.933
+frame 290 t=9.633s meanAbsDiff=2.5 silhouetteIoU=0.97
+frame 325 t=10.8s meanAbsDiff=1.5 silhouetteIoU=0.914

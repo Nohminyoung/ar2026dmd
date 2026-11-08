@@ -1,0 +1,31 @@
+{
+  "name": "gyeolhap-webar",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "vendor": "node scripts/copy-vendor.mjs",
+    "pack-geometry": "node scripts/pack-geometry.mjs",
+    "dev": "npm run vendor && vite",
+    "build": "npm run vendor && vite build",
+    "preview": "vite preview",
+    "test": "node --test \"test/*.test.js\"",
+    "qr": "node scripts/generate-qr.mjs",
+    "export-assets": "echo \"run Blender: see README (scripts/export-web-assets.py)\""
+  },
+  "dependencies": {
+    "@8thwall/engine-binary": "1.0.0",
+    "three": "0.160.0"
+  },
+  "devDependencies": {
+    "@8thwall/image-target-cli": "1.0.0",
+    "jsqr": "1.4.0",
+    "meshoptimizer": "0.22.0",
+    "pngjs": "5.0.0",
+    "qrcode": "1.5.4",
+    "vite": "8.3.6"
+  }
+}

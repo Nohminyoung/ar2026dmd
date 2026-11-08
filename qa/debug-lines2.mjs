@@ -1,0 +1,20 @@
+import { createRequire } from 'module'; const { chromium } = createRequire(import.meta.url)('playwright');
+const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+const p = await b.newPage({ viewport: { width: 360, height: 640 } });
+p.on('console', (m) => { if (m.type() !== 'debug') console.log('console', m.type(), m.text().slice(0, 600)); });
+await p.goto('http://localhost:5173/preview.html?t=7.133&w=360&h=640&poster=0');
+await p.waitForFunction(() => window.__ready === true, null, { timeout: 120000 });
+const info = await p.evaluate(() => {
+  const r = window.__renderer, pl = window.__player;
+  pl.bodyGroup.visible = false;
+  const mat = pl.lineMesh.material;
+  mat.vertexShader = mat.vertexShader.replace('float halfPx = max(rPx, 0.6);', 'float halfPx = 3.0;').replace('vAlpha = pow(cov, 1.0 / 2.2);', 'vAlpha = 1.0;').replace('vColor = lcolor;', 'vColor = vec3(a3.w, a2.w, lineT) + vec3(0.0, 0.0, 0.0*a0.w);');
+  mat.needsUpdate = true;
+  window.__render();
+  const gl = r.getContext();
+  const prog = r.info.programs.map((x) => x.name || x.cacheKey?.slice(0, 40));
+  return { programs: prog, calls: r.info.render.calls, tris: r.info.render.triangles, err: gl.getError() };
+});
+console.log(JSON.stringify(info));
+await p.screenshot({ path: 'qa/compare/debug_lines.png' });
+await b.close();
