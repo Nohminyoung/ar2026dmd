@@ -2,8 +2,11 @@
 :root {
   --ink: #f3efe8; --muted: #a59f97; --bg: #000; --panel: rgba(12, 12, 14, 0.78); --line: rgba(255, 255, 255, 0.14);
   --accent: #ff5b6e; --accent-ink: #160307;
-  --spectrum: linear-gradient(90deg, #ff4f6d, #ffb000, #36d27a, #29b6f6, #7c5cff, #ff4fd8);
-  --sans: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  --spectrum: linear-gradient(90deg, #ec2777, #e6aa4d, #ebd240, #80c142);
+  /* colors sampled from the invitation artwork */
+  --grad-title: linear-gradient(90deg, #d82e6f 0%, #d04567 22%, #d57c58 30%, #dcab4c 37%, #e0d042 45%, #c1cd42 58%, #9fc242 66%, #7ab643 80%, #7ab643 100%);
+  --grad-sub: linear-gradient(90deg, #d92075 0%, #d02e6e 15%, #ce3a6a 25%, #cd6962 30%, #d3865d 35%, #d1a550 40%, #d4c144 45%, #cbd23a 50%, #adc93c 55%, #91c33e 65%, #6ebc43 75%, #6dbb43 100%); /* sampled from the logo PDF */
+  --sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
   --safe-t: env(safe-area-inset-top, 0px); --safe-b: env(safe-area-inset-bottom, 0px);
   --safe-l: env(safe-area-inset-left, 0px); --safe-r: env(safe-area-inset-right, 0px);
   color-scheme: dark;
@@ -26,21 +29,33 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--ink); outline-o
 
 .sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; display: flex; flex-direction: column; gap: 14px;
   padding: 28px max(20px, var(--safe-r)) calc(24px + var(--safe-b)) max(20px, var(--safe-l)); }
-.intro { top: 0; justify-content: flex-end; background:
-  radial-gradient(120% 60% at 50% 18%, rgba(124, 92, 255, 0.18), transparent 60%),
-  radial-gradient(90% 50% at 15% 70%, rgba(255, 79, 109, 0.14), transparent 60%), #000; padding-top: calc(28px + var(--safe-t)); }
-.intro::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--spectrum); }
-.eyebrow { margin: 0; font-size: 13px; color: var(--muted); letter-spacing: 0.04em; }
-.wordmark { margin: 0 0 4px; font-size: clamp(88px, 34vw, 168px); line-height: 0.9; font-weight: 900; letter-spacing: -0.04em;
-  background: var(--spectrum); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.lead { margin: 0 0 6px; font-size: 17px; line-height: 1.55; color: var(--ink); }
-.fine { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.5; }
-.credit { margin: 4px 0 0; font-size: 11px; color: #6f6a64; }
+.intro { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; padding: 0; background: #000; overflow: hidden; }
+.lead { margin: 0 0 6px; font-size: 16px; line-height: 1.55; color: var(--ink); }
+.intro-scroll { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; align-items: center;
+  padding: calc(env(safe-area-inset-top, 0px) + 3.5vh) max(16px, var(--safe-r)) 0 max(16px, var(--safe-l)); }
+.invite { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0; width: 100%; }
+.kicker { margin: 0 0 1.4vh; font-size: clamp(14px, 4vw, 22px); font-weight: 500; color: #fff; letter-spacing: -0.01em; }
+.title { margin: 0; font-size: clamp(20px, 5.6vw, 32px); font-weight: 700; color: #fff; letter-spacing: -0.02em; line-height: 1.25; text-wrap: balance; }
+.grad-title, .grad-sub { background-clip: text; -webkit-background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+.grad-title { background-image: var(--grad-title); }
+.grad-sub { background-image: var(--grad-sub); }
+/* logo + subtitle: proportions locked to the design PDF (all sizes relative to the logo width = 100cqw).
+   Calibrated by qa/calibrate-brand.mjs: subtitle ink width 92.5%, gap 3.1%, ink height 7.4% of the logo width. */
+.brand { width: 47%; max-width: 300px; container-type: inline-size; display: flex; flex-direction: column; align-items: center; }
+.logo-wrap { margin: 0; width: 100%; line-height: 0; }
+.logo { display: block; width: 100%; height: auto; margin: 0; }
+.brand .subtitle { margin: var(--sub-gap, 2.95cqw) 0 0; font-size: var(--sub-size, 8.645cqw); font-weight: var(--sub-weight, 240); line-height: 1; letter-spacing: var(--sub-track, -0.02em); white-space: nowrap; }
+.art { display: block; flex: 1 1 0; min-height: 0; width: calc(100% + 32px); max-width: 640px; height: auto; margin: 1.6vh -16px 0; object-fit: contain; object-position: center top; }
+.intro .notice { margin-top: 16px; width: 100%; max-width: 520px; }
+.cta { position: relative; flex: 0 0 auto; z-index: 2; display: flex; flex-direction: column; gap: 6px;
+  padding: 16px max(20px, var(--safe-r)) calc(12px + var(--safe-b)) max(20px, var(--safe-l)); background: #000; }
+@media (min-width: 700px) { .cta { max-width: 520px; margin: 0 auto; } }
+.credit { margin: 2px 0 0; font-size: 10px; line-height: 1.4; color: #6f6a64; }
 .credit a { color: #8d877f; }
-.load { display: grid; gap: 6px; }
+.load { display: grid; gap: 4px; }
 .bar { height: 3px; background: var(--line); border-radius: 3px; overflow: hidden; }
 .bar span { display: block; height: 100%; width: 0%; background: var(--spectrum); transition: width 0.25s; }
-#load-text { margin: 0; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+#load-text { margin: 0; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .notice { border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; background: rgba(255, 255, 255, 0.04); font-size: 14px; line-height: 1.5; }
 .notice p { margin: 0 0 8px; }
 .row { display: flex; gap: 8px; align-items: center; min-width: 0; }
@@ -61,3 +76,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--ink); outline-o
 .error .title { margin: 0; font-size: 22px; font-weight: 800; }
 @media (min-width: 700px) { .sheet { max-width: 520px; margin: 0 auto; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* start button: a bit slimmer, with clear space above the loading bar */
+.cta .primary { min-height: 50px; font-size: 17px; margin-bottom: 14px; }

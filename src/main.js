@@ -1,4 +1,5 @@
 // Visitor flow: start -> permissions -> scan poster -> stabilize -> anchor once -> play once -> end buttons.
+import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
 import * as THREE from 'three';
 import { loadArtwork } from './asset-loader.js';
 import { ArtworkPlayer } from './artwork-player.js';
@@ -67,7 +68,7 @@ function render() {
   const st = session.state;
   ui.intro.hidden = !(st === S.IDLE || st === S.STARTING);
   ui.start.disabled = st === S.STARTING;
-  ui.start.textContent = st === S.STARTING ? '카메라를 준비하고 있어요…' : 'AR 시작';
+  ui.start.textContent = st === S.STARTING ? '카메라를 준비하고 있어요…' : 'AR 시작하기';
   ui.hud.hidden = !session.isCamera();
   ui.end.hidden = st !== S.ENDED;
   ui.error.hidden = st !== S.ERROR;
