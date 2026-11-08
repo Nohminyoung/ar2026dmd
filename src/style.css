@@ -12,7 +12,7 @@
 html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font-family: var(--sans); -webkit-text-size-adjust: 100%; }
 body { overflow: hidden; overscroll-behavior: none; }
 #app { position: fixed; inset: 0; height: 100dvh; }
-#camerafeed { position: absolute; inset: 0; width: 100%; height: 100%; display: block; background: #000; touch-action: none; }
+#camerafeed { position: absolute; inset: 0; width: 100% !important; height: 100% !important; display: block; background: #000; touch-action: none; }
 [hidden] { display: none !important; }
 
 button { font: inherit; border: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }

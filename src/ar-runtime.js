@@ -69,7 +69,12 @@ export class ArRuntime {
     // the engine draws into the canvas' pixel size: keep it at the window size (DPR capped), like XRExtras.FullWindowCanvas
     this._fit = () => {
       const r = Math.min(window.devicePixelRatio || 1, maxPixelRatio);
-      const w = Math.round(canvas.clientWidth * r), h = Math.round(canvas.clientHeight * r);
+      // size from the window, never from the canvas itself: three.js writes canvas.style.width/height = pixel size,
+      // so measuring the canvas would grow it by the pixel ratio on every start (the camera kept zooming in)
+      const box = (canvas.parentElement || document.documentElement).getBoundingClientRect();
+      const vw = box.width || window.innerWidth, vh = box.height || window.innerHeight;
+      const w = Math.round(vw * r), h = Math.round(vh * r);
+      canvas.style.width = '100%'; canvas.style.height = '100%';
       if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
     };
     this._fit();

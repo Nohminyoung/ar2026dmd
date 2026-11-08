@@ -1,0 +1,13 @@
+node_modules/
+dist/
+input/
+build-cache/
+public/vendor/xr/
+qa/*.png
+qa/compare/*.png
+qa/reference/*.png
+qa/packed/
+qa/qr-draft/
+*.log
+.DS_Store
+.vercel
