@@ -79,3 +79,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--ink); outline-o
 
 /* start button: a bit slimmer, with clear space above the loading bar */
 .cta .primary { min-height: 50px; font-size: 17px; margin-bottom: 14px; }
+
+/* hold hint: gentle pulse so visitors notice they can tap */
+.status.tap { animation: tap-pulse 1.6s ease-in-out infinite; }
+@keyframes tap-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+@media (prefers-reduced-motion: reduce) { .status.tap { animation: none; } }

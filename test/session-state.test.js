@@ -28,3 +28,12 @@ test('tracking pause and resume; marker loss before latch returns to scanning', 
   assert.ok(s.send('TRACKING_NORMAL')); assert.equal(s.state, S.PLAYING);
   assert.equal(s.send('TARGET_LOST'), false);   // marker loss after latch changes nothing
 });
+
+test('two-part flow: hold after expanding, tap plays the return, then end', () => {
+  const s = new SessionState(); ['START', 'CAMERA_READY', 'TARGET_SEEN', 'LATCHED'].forEach((e) => s.send(e));
+  assert.ok(s.send('HOLD')); assert.equal(s.state, S.HOLDING); assert.ok(s.isCamera());
+  assert.equal(s.send('END'), false); assert.equal(s.send('TRACKING_LIMITED'), false);
+  assert.ok(s.send('TAP')); assert.equal(s.state, S.PLAYING);
+  assert.ok(s.send('END')); assert.ok(s.send('REPLAY'));
+  s.send('HOLD'); assert.ok(s.send('RESET')); assert.equal(s.state, S.SCANNING);
+});

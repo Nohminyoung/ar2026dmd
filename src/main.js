@@ -3,7 +3,7 @@ import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
 import * as THREE from 'three';
 import { loadArtwork } from './asset-loader.js';
 import { ArtworkPlayer } from './artwork-player.js';
-import { PlaybackClock } from './playback-clock.js';
+import { SegmentedClock } from './segmented-clock.js';
 import { AnchorPolicy } from './anchor-policy.js';
 import { SessionState, S } from './session-state.js';
 import { ArRuntime, waitForXR8, compatibility } from './ar-runtime.js';
@@ -25,6 +25,7 @@ const MSG = {
   slowStable: '휴대폰을 천천히 움직여 주변도 함께 비춰 주세요',
   loading: (p) => `작품을 불러오는 중… ${p}%`,
   relocate: '위치가 맞지 않으면 ‘위치 다시 맞추기’를 눌러 주세요',
+  tap: () => config?.playback?.tapHint || '화면을 터치하면 포스터로 돌아가요',
 };
 
 // ---------------- config + assets (start downloading immediately) ----------------
@@ -77,6 +78,8 @@ function render() {
   if (st === S.STABILIZING) setStatus(MSG.found);
   if (st === S.PLAYING || st === S.ENDED) setStatus('');
   if (st === S.TRACKING_PAUSED) setStatus(MSG.move, true);
+  if (st === S.HOLDING) setStatus(MSG.tap());
+  ui.status.classList.toggle('tap', st === S.HOLDING);
 }
 function setStatus(t, warn = false) { ui.status.textContent = t; ui.status.classList.toggle('warn', warn); }
 
@@ -132,7 +135,7 @@ function onSceneReady() { attach(); }
 function attach() {
   if (attached || !player || !runtime.scene) return;
   runtime.contentAlignment.add(player.root);
-  clock = new PlaybackClock(player.duration);
+  clock = new SegmentedClock(config.playback?.segments, player.fps, player.duration);
   attached = true;
 }
 assetsP.then(() => { attach(); if (pendingLatch && session.state === S.STABILIZING) latch(pendingLatch); }).catch(() => {});
@@ -185,9 +188,10 @@ function onFrame(now) {
   const r = runtime.renderer;
   if (r) { const v = r.getDrawingBufferSize(new THREE.Vector2()); player.setResolution(v.x, v.y); }
   if (session.state === S.PLAYING) {
-    const ended = clock.tick(now);
+    const ev = clock.tick(now);
     player.setTime(clock.elapsed);
-    if (ended) session.send('END');
+    if (ev === 'hold') session.send('HOLD');
+    else if (ev === 'end') session.send('END');
   } else if (session.state === S.TRACKING_PAUSED && now - trackingLimitedAt > (config.anchor.trackingLostResetHintMs ?? 8000)) {
     setStatus(MSG.relocate, true); ui.reset.classList.add('attention');
   }
@@ -214,6 +218,14 @@ ui.home.addEventListener('click', () => {
   location.assign(url);
 });
 ui.close.addEventListener('click', () => { teardown(); session.send('CLOSE'); });
+// one tap anywhere (except the buttons) while the artwork waits fully expanded -> play the return part
+ui.app.addEventListener('pointerup', (e) => {
+  if (session.state !== S.HOLDING || e.target.closest('button, a')) return;
+  if (!clock.continue()) return;
+  session.send('TAP');
+  if (policy?.trackingReady()) clock.start();
+  else { clock.pause(); trackingLimitedAt = performance.now(); session.send('TRACKING_LIMITED'); }
+});
 
 function teardown() {
   clock?.pause();

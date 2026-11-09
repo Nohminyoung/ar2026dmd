@@ -12,8 +12,16 @@
   "markerPhysicalNote": "Not needed: the poster itself is the target; the artwork is scaled from the detected target width. PDF document size is 600 x 900 mm, actual print size unconfirmed.",
   "artworkReferenceWidth": 1.0,
   "markerToArtwork": {
-    "position": [-0.00005, -0.0003, 0.0],
-    "rotationDeg": [0, 0, 0],
+    "position": [
+      -5e-05,
+      -0.0003,
+      0.0
+    ],
+    "rotationDeg": [
+      0,
+      0,
+      0
+    ],
     "scale": 1.0052,
     "source": "scripts/fit-alignment.py: SIFT/RANSAC fit of the Blender poster onto the final print, 2176 inliers, median residual 0.1 px. Crop center = print center."
   },
@@ -27,5 +35,24 @@
     "minViewDistanceInPosterWidths": 1.6,
     "trackingLostResetHintMs": 8000
   },
-  "render": { "maxPixelRatio": 1.5 }
+  "render": {
+    "maxPixelRatio": 1.5
+  },
+  "playback": {
+    "segments": [
+      {
+        "fromFrame": 1,
+        "toFrame": 301,
+        "speed": 1.5,
+        "holdAtEnd": true
+      },
+      {
+        "fromFrame": 301,
+        "toFrame": 390,
+        "speed": 0.7
+      }
+    ],
+    "tapHint": "화면을 터치하면 포스터로 돌아가요",
+    "note": "Frames are Blender frames of the exported file (30 fps). Part 1 = 등장~14팀 동시 완성, holds fully expanded at frame 301; a tap plays 전체 동시 복귀~포스터만 남음. speed 1.5 = 1.5x faster."
+  }
 }
