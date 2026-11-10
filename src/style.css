@@ -84,3 +84,25 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--ink); outline-o
 .status.tap { animation: tap-pulse 1.6s ease-in-out infinite; }
 @keyframes tap-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
 @media (prefers-reduced-motion: reduce) { .status.tap { animation: none; } }
+
+/* ---------- loading screen (public/loader) ---------- */
+.intro-loader { background: #fff radial-gradient(circle, #ddd 1px, transparent 1px) center / 20px 20px; transition: opacity .9s .35s ease; }
+.intro-loader.is-leaving { opacity: 0; }
+.loader-credit { position: absolute; left: 0; right: 0; bottom: calc(12px + var(--safe-b)); margin: 0; text-align: center; font-family: var(--sans); pointer-events: auto; color: #8b9096; }
+.loader-credit a { color: #6d737a; }
+
+/* ---------- start panel: only when the camera can't start by itself ---------- */
+.intro { align-items: stretch; justify-content: center; color: #29323a; cursor: pointer;
+  background: #fff radial-gradient(circle, #ddd 1px, transparent 1px) center / 20px 20px; }
+.panel { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center;
+  padding: calc(24px + var(--safe-t)) max(24px, var(--safe-r)) 24px max(24px, var(--safe-l)); }
+.panel-title { margin: 0; font-size: 21px; font-weight: 700; letter-spacing: -0.02em; }
+.panel-sub { margin: 0 0 10px; font-size: 14px; line-height: 1.5; color: #687078; }
+.panel .primary { max-width: 320px; min-height: 52px; font-size: 17px; background: #29323a; color: #fff; }
+.panel .notice { max-width: 360px; text-align: left; border-color: #d7dadd; background: #fff; color: #29323a; }
+.panel .notice code { color: #687078; }
+.panel .ghost.small { background: #fff; color: #29323a; border-color: #c9cdd1; }
+.intro > .credit { margin: 0; padding: 0 16px calc(12px + var(--safe-b)); text-align: center; color: #8b9096; }
+.intro > .credit a { color: #6d737a; }
+/* camera warm-up: show the status pill, hide the reset button until the camera is on */
+#app[data-state="STARTING"] #reset { visibility: hidden; }

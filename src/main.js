@@ -1,4 +1,4 @@
-// Visitor flow: start -> permissions -> scan poster -> stabilize -> anchor once -> play once -> end buttons.
+// Visitor flow: loading screen -> camera starts by itself (one tap only where the browser demands it) -> permissions -> scan poster -> stabilize -> anchor once -> play once -> end buttons.
 import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
 import * as THREE from 'three';
 import { loadArtwork } from './asset-loader.js';
@@ -12,9 +12,10 @@ const $ = (id) => document.getElementById(id);
 // ?qa=1 : QA only. Exposes internals and draws the artwork on the live marker pose (never used to latch).
 const QA = new URLSearchParams(location.search).get('qa') === '1';
 const ui = {
-  app: $('app'), canvas: $('camerafeed'), intro: $('intro'), start: $('start'), bar: $('load-bar'), loadText: $('load-text'),
+  app: $('app'), canvas: $('camerafeed'), intro: $('intro'),
   hud: $('hud'), status: $('status'), reset: $('reset'), close: $('close'), end: $('end'), replay: $('replay'), home: $('home'),
   error: $('error'), errTitle: $('error-title'), errText: $('error-text'), retry: $('retry'), inapp: $('inapp'), url: $('page-url'), copy: $('copy-url'),
+  introTitle: $('intro-title'), introSub: $('intro-sub'),
 };
 
 const MSG = {
@@ -24,6 +25,7 @@ const MSG = {
   move: '주변을 천천히 비추면 이어서 재생됩니다',
   slowStable: '휴대폰을 천천히 움직여 주변도 함께 비춰 주세요',
   loading: (p) => `작품을 불러오는 중… ${p}%`,
+  starting: '카메라를 켜고 있어요…',
   relocate: '위치가 맞지 않으면 ‘위치 다시 맞추기’를 눌러 주세요',
   tap: () => config?.playback?.tapHint || '화면을 터치하면 포스터로 돌아가요',
 };
@@ -46,15 +48,25 @@ const assetsP = (async () => {
 assetsP.catch(() => {});
 
 function pct() { return totalBytes ? Math.min(100, Math.round((loadedBytes / totalBytes) * 100)) : 0; }
+// loading screen: public/loader (window.MainIntroLoading). Optional: the page still works if it failed to load.
+const loader = () => window.MainIntroLoading || null;
 function showLoad() {
-  ui.bar.style.width = (player ? 100 : pct()) + '%';
-  ui.loadText.textContent = assetsError ? '작품을 불러오지 못했어요. 네트워크를 확인하고 새로고침해 주세요.'
-    : player ? `준비됐어요 · ${(totalBytes / 1e6).toFixed(0)}MB` : `작품을 불러오는 중… ${pct()}%`;
+  const l = loader(); if (!l) return;
+  if (assetsError) l.fail(); else if (!player) l.update(pct());
 }
+// loading screen gone (or never there) -> try to open the camera right away
+const afterLoader = new Promise((res) => {
+  const root = document.documentElement;
+  const done = () => !root.classList.contains('intro-loading') && !root.classList.contains('intro-revealing');
+  window.addEventListener('main-intro-reveal', res, { once: true });
+  const poll = setInterval(() => { if (done()) { clearInterval(poll); res(); } }, 300);
+});
+assetsP.then(() => loader()?.finish(), () => {});
 
 // ---------------- in-app browsers ----------------
 const INAPP = /KAKAOTALK|Instagram|FBAN|FBAV|NAVER\(inapp|Line\/|DaumApps|everytimeApp|Snapchat|; wv\)/i;
-if (INAPP.test(navigator.userAgent)) { ui.inapp.hidden = false; ui.url.textContent = location.href; }
+const IN_APP = INAPP.test(navigator.userAgent);
+if (IN_APP) { ui.inapp.hidden = false; ui.url.textContent = location.href; }
 ui.copy.addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(location.href); ui.copy.textContent = '복사했어요'; }
   catch { const r = document.createRange(); r.selectNodeContents(ui.url); getSelection().removeAllRanges(); getSelection().addRange(r); ui.copy.textContent = '길게 눌러 복사'; }
@@ -62,15 +74,14 @@ ui.copy.addEventListener('click', async () => {
 
 // ---------------- session ----------------
 const runtime = new ArRuntime({ onSceneReady, onFrame, onImage, onTracking, onCameraStatus, onError: (e) => fail('engine', e) });
-let policy = null, clock = null, attached = false, trackingLimitedAt = 0, pendingLatch = null;
+let policy = null, clock = null, attached = false, trackingLimitedAt = 0, pendingLatch = null, panelWanted = false;
 const session = new SessionState((next) => { ui.app.dataset.state = next; render(); });
 
 function render() {
   const st = session.state;
-  ui.intro.hidden = !(st === S.IDLE || st === S.STARTING);
-  ui.start.disabled = st === S.STARTING;
-  ui.start.textContent = st === S.STARTING ? '카메라를 준비하고 있어요…' : 'AR 시작하기';
-  ui.hud.hidden = !session.isCamera();
+  ui.intro.hidden = !(st === S.IDLE && panelWanted);
+  ui.hud.hidden = !(session.isCamera() || st === S.STARTING);
+  if (st === S.STARTING) setStatus(MSG.starting);
   ui.end.hidden = st !== S.ENDED;
   ui.error.hidden = st !== S.ERROR;
   ui.reset.classList.remove('attention');
@@ -98,17 +109,45 @@ function fail(kind, err) {
   if (!session.send('FAIL')) { session.state = S.ERROR; render(); }
 }
 
-// ---------------- start (one tap) ----------------
-ui.start.addEventListener('click', () => {
-  if (!(session.state === S.IDLE || session.state === S.ERROR)) return;     // no double start
-  // iOS: ask motion/orientation inside the tap, before any await, so the user activation is still valid
-  const asks = [];
-  for (const C of [window.DeviceMotionEvent, window.DeviceOrientationEvent]) {
-    if (C && typeof C.requestPermission === 'function') asks.push(C.requestPermission().catch(() => 'denied'));
+// ---------------- start: automatic after loading ----------------
+// iOS Safari only shows the motion/orientation permission from inside a tap. Android and already-granted iPhones need no tap.
+const MOTION = [window.DeviceMotionEvent, window.DeviceOrientationEvent].filter((C) => C && typeof C.requestPermission === 'function');
+function askMotion() { return MOTION.map((C) => C.requestPermission().catch(() => 'needs-tap')); }
+// a tap during loading already counts: ask then, so the panel is usually never needed
+let earlyMotion = null;
+function earlyTap() { if (!earlyMotion && MOTION.length) earlyMotion = Promise.all(askMotion()); }
+if (MOTION.length) for (const t of ['touchend', 'click']) window.addEventListener(t, earlyTap, { capture: true, once: true });
+
+function showPanel(kind) {
+  panelWanted = true;
+  if (kind === 'inapp') { ui.introTitle.textContent = '브라우저에서 열어 주세요'; ui.introSub.textContent = ''; }
+  else if (kind === 'again') { ui.introTitle.textContent = '다시 체험하려면 화면을 터치하세요'; ui.introSub.textContent = ''; }
+  render();
+}
+async function autoStart() {
+  await afterLoader;
+  for (const t of ['touchend', 'click']) window.removeEventListener(t, earlyTap, { capture: true });
+  if (session.state !== S.IDLE) return;
+  if (assetsError) return fail('network', assetsError);
+  if (IN_APP) return showPanel('inapp');
+  if (MOTION.length) {
+    const r = await (earlyMotion || Promise.all(askMotion()));          // resolves 'granted' without a tap if allowed before
+    if (r.some((x) => x !== 'granted')) { earlyMotion = null; return showPanel('tap'); }
   }
+  startSession([]);
+}
+function startSession(asks) {
+  if (!(session.state === S.IDLE || session.state === S.ERROR)) return;     // no double start
+  panelWanted = false;
   session.send('START');
   begin(asks);
+}
+// panel: the whole screen is the button (ask inside the tap, before any await, so the user activation is still valid)
+ui.intro.addEventListener('click', (e) => {
+  if (e.target.closest('a, #copy-url, #page-url')) return;
+  startSession(askMotion().map((p) => p.then((x) => (x === 'needs-tap' ? 'denied' : x))));
 });
+autoStart();
 ui.retry.addEventListener('click', () => location.reload());
 
 async function begin(asks) {
@@ -217,7 +256,7 @@ ui.home.addEventListener('click', () => {
   teardown();
   location.assign(url);
 });
-ui.close.addEventListener('click', () => { teardown(); session.send('CLOSE'); });
+ui.close.addEventListener('click', () => { teardown(); session.send('CLOSE'); showPanel('again'); });
 // one tap anywhere (except the buttons) while the artwork waits fully expanded -> play the return part
 ui.app.addEventListener('pointerup', (e) => {
   if (session.state !== S.HOLDING || e.target.closest('button, a')) return;

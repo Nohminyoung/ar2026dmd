@@ -6,38 +6,37 @@
 <meta name="theme-color" content="#000000">
 <title>결합 AR · 제6회 청주대학교 디지털미디어디자인학과 졸업전시회</title>
 <meta name="description" content="포스터를 비추면 졸업전시 포스터 '결합'이 공간에 펼쳐지는 웹 AR">
+<link rel="stylesheet" href="/loader/css/loader.css">
 <link rel="stylesheet" href="/src/style.css">
+<script>document.documentElement.classList.add('intro-loading');</script>
+<script defer src="/loader/js/main-intro-loading.js" onerror="document.documentElement.classList.remove('intro-loading')"></script>
 <script src="/vendor/xr/xr.js" async data-preload-chunks="slam"></script>
 </head>
 <body>
-<main id="app" data-state="IDLE">
+<!-- 로딩 화면 (public/loader). 진행률은 실제 작품 다운로드에 맞춰 올라가요. -->
+<div id="introLoader" class="intro-loader" role="progressbar" aria-label="작품 로딩" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <div class="intro-loader-mark">
+    <div class="intro-loader-stage" aria-hidden="true"><svg class="intro-loader-field" focusable="false"></svg></div>
+    <span class="intro-loader-percent" data-loading-percent aria-hidden="true">0%</span>
+  </div>
+  <p class="credit loader-credit">AR 엔진: 8th Wall Engine © Niantic Spatial, Inc. · <a href="/vendor/xr/LICENSE-engine-binary.txt" target="_blank" rel="noopener">라이선스·보증 부인 고지</a></p>
+</div>
+<main id="app" data-state="IDLE" data-loading-content>
   <canvas id="camerafeed" aria-hidden="true"></canvas>
 
-  <!-- 첫 화면: 아래 글자들은 이미지가 아니라 텍스트라 여기서 바로 고칠 수 있어요.
-       그라데이션은 class="grad-sub"(부제)가 붙은 부분에만 들어가요. 제목 줄이 다시 필요하면 class="grad-title"을 쓰면 돼요. -->
-  <section id="intro" class="intro" aria-labelledby="intro-title">
-    <div class="intro-scroll">
-      <header class="invite">
-        <!-- 로고와 부제 간격은 디자인 PDF 기준(로고 폭 대비 비율)으로 고정되어 있어요. 글자만 바꾸면 돼요. -->
-        <div class="brand">
-          <h1 id="intro-title" class="logo-wrap"><img class="logo" src="/intro/logo-icons.png" alt="유연한 결합" width="916" height="177"></h1>
-          <p class="subtitle"><span class="grad-sub">다채로운 개성이 빚어낸 결합</span></p>
-        </div>
-      </header>
-      <img class="art" src="/intro/poster-art.webp" alt="결합 포스터" width="1400" height="1831">
+  <!-- 시작 패널: 로딩이 끝나면 바로 카메라를 켜요. 이 패널은 자동으로 시작할 수 없을 때만 보여요
+       (아이폰의 동작 센서 허용은 터치가 꼭 한 번 필요함 · 카톡 등 앱 안 브라우저 · ✕로 끈 뒤). 글자는 여기서 고치면 돼요. -->
+  <section id="intro" class="intro" hidden aria-labelledby="intro-title">
+    <div class="panel">
+      <p id="intro-title" class="panel-title">화면을 터치하면 AR이 시작돼요</p>
+      <p id="intro-sub" class="panel-sub">카메라와 동작 센서 사용을 물어보면 ‘허용’을 눌러 주세요</p>
       <div id="inapp" class="notice" hidden>
         <p>이 앱 안의 브라우저에서는 AR이 열리지 않을 수 있어요.<br>아이폰은 <b>Safari</b>, 안드로이드는 <b>Chrome</b>에서 열어 주세요.</p>
         <div class="row"><code id="page-url"></code><button id="copy-url" class="ghost small" type="button">주소 복사</button></div>
       </div>
-    </div>
-    <div class="cta">
       <button id="start" class="primary" type="button">AR 시작하기</button>
-      <div class="load" aria-live="polite">
-        <div class="bar"><span id="load-bar"></span></div>
-        <p id="load-text">작품을 불러오는 중…</p>
-      </div>
-      <p class="credit">AR 엔진: 8th Wall Engine © Niantic Spatial, Inc. · <a href="/vendor/xr/LICENSE-engine-binary.txt" target="_blank" rel="noopener">라이선스·보증 부인 고지</a></p>
     </div>
+    <p class="credit">AR 엔진: 8th Wall Engine © Niantic Spatial, Inc. · <a href="/vendor/xr/LICENSE-engine-binary.txt" target="_blank" rel="noopener">라이선스·보증 부인 고지</a></p>
   </section>
 
   <div id="hud" class="hud" hidden>
