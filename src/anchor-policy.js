@@ -18,7 +18,7 @@ export class AnchorPolicy {
     this.targetName = targetName;
     this.o = {
       stableWindowMs: 650, minSamples: 3, maxSampleGapMs: 250,
-      maxWidthChange: 0.05, maxPositionChangeOfWidth: 0.03, maxRotationChangeDeg: 10, ...opts,
+      maxWidthChange: 0.05, maxPositionChangeOfWidth: 0.03, maxRotationChangeDeg: 10, requireTracking: true, ...opts,
     };
     this.reset();
   }
@@ -28,7 +28,8 @@ export class AnchorPolicy {
   unlatch() { this.samples = []; this.latched = false; this.pose = null; }
 
   setTracking(status, reason) { this.tracking = { status, reason }; }
-  trackingReady() { return this.tracking.status === 'NORMAL' && this.tracking.reason !== 'INITIALIZING'; }
+  // requireTracking:false = image-only mode (no world tracking): the poster itself is the only reference
+  trackingReady() { return !this.o.requireTracking || (this.tracking.status === 'NORMAL' && this.tracking.reason !== 'INITIALIZING'); }
 
   lost(name) { if (!this.latched && (!name || name === this.targetName)) this.samples = []; }
 

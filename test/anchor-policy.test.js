@@ -41,3 +41,10 @@ test('lost before latch discards samples; unlatch keeps tracking state', () => {
   assert.equal(a.latched, true);
   a.unlatch(); assert.equal(a.latched, false); assert.equal(a.trackingReady(), true);
 });
+
+test('image-only mode latches without world tracking', () => {
+  const p = new AnchorPolicy('poster-target', { requireTracking: false });
+  const d = { name: 'poster-target', position: { x: 0, y: 0, z: -2 }, rotation: { x: 0, y: 0, z: 0, w: 1 }, scale: 1, scaledWidth: 0.6 };
+  let r; for (let t = 0; t <= 800; t += 100) r = p.observe(d, t);
+  assert.equal(r.state, 'ignored'); assert.ok(p.latched); assert.ok(p.trackingReady());
+});

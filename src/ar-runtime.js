@@ -28,11 +28,12 @@ export class ArRuntime {
     this._lastTracking = '';
   }
 
-  async start({ canvas, targetData, maxPixelRatio = 1.5 }) {
+  // worldTracking:false = image-only mode (no motion sensors needed); the artwork then follows the poster while it is in view
+  async start({ canvas, targetData, maxPixelRatio = 1.5, worldTracking = true }) {
     if (this.running) return;
     const XR8 = await waitForXR8();
     window.THREE = THREE;                                  // XR8.Threejs expects a global THREE
-    XR8.XrController.configure({ disableWorldTracking: false, scale: 'absolute', imageTargetData: [targetData] });
+    XR8.XrController.configure({ disableWorldTracking: !worldTracking, scale: worldTracking ? 'absolute' : 'responsive', imageTargetData: [targetData] });
     if (XR8.Threejs.configure) XR8.Threejs.configure({ renderCameraTexture: false }); // GlTextureRenderer draws the camera once
     const self = this;
     const forward = (type) => ({ detail }) => self.h.onImage?.(type, detail);

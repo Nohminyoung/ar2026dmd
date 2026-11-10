@@ -23,6 +23,7 @@ const MSG = {
   found: '포스터를 찾았어요. 위치를 맞추고 있어요',
   back: '조금 뒤로 물러나 주세요',
   move: '주변을 천천히 비추면 이어서 재생됩니다',
+  lostPoster: '포스터를 다시 비추면 이어서 재생됩니다',
   slowStable: '휴대폰을 천천히 움직여 주변도 함께 비춰 주세요',
   loading: (p) => `작품을 불러오는 중… ${p}%`,
   starting: '카메라를 켜고 있어요…',
@@ -75,6 +76,8 @@ ui.copy.addEventListener('click', async () => {
 // ---------------- session ----------------
 const runtime = new ArRuntime({ onSceneReady, onFrame, onImage, onTracking, onCameraStatus, onError: (e) => fail('engine', e) });
 let policy = null, clock = null, attached = false, trackingLimitedAt = 0, pendingLatch = null, panelWanted = false;
+// follow = image-only mode (iPhone without the motion permission): no world tracking, artwork rides on the live poster pose
+let follow = false, posterVisible = false;
 const session = new SessionState((next) => { ui.app.dataset.state = next; render(); });
 
 function render() {
@@ -88,7 +91,7 @@ function render() {
   if (st === S.SCANNING) setStatus(MSG.scanning);
   if (st === S.STABILIZING) setStatus(MSG.found);
   if (st === S.PLAYING || st === S.ENDED) setStatus('');
-  if (st === S.TRACKING_PAUSED) setStatus(MSG.move, true);
+  if (st === S.TRACKING_PAUSED) setStatus(follow ? MSG.lostPoster : MSG.move, true);
   if (st === S.HOLDING) setStatus(MSG.tap());
   ui.status.classList.toggle('tap', st === S.HOLDING);
 }
@@ -120,8 +123,8 @@ if (MOTION.length) for (const t of ['touchend', 'click']) window.addEventListene
 
 function showPanel(kind) {
   panelWanted = true;
-  if (kind === 'inapp') { ui.introTitle.textContent = '브라우저에서 열어 주세요'; ui.introSub.textContent = ''; }
-  else if (kind === 'again') { ui.introTitle.textContent = '다시 체험하려면 화면을 터치하세요'; ui.introSub.textContent = ''; }
+  if (kind === 'inapp') { ui.introTitle.textContent = '브라우저에서 열어 주세요'; ui.introSub.textContent = ''; $('start').textContent = '그래도 시작하기'; }
+  else { ui.introTitle.textContent = '다시 체험하려면 화면을 터치하세요'; ui.introSub.textContent = ''; $('start').textContent = '다시 시작하기'; }
   render();
 }
 async function autoStart() {
@@ -132,13 +135,14 @@ async function autoStart() {
   if (IN_APP) return showPanel('inapp');
   if (MOTION.length) {
     const r = await (earlyMotion || Promise.all(askMotion()));          // resolves 'granted' without a tap if allowed before
-    if (r.some((x) => x !== 'granted')) { earlyMotion = null; return showPanel('tap'); }
+    // no tap yet -> start anyway in image-only mode (needs no motion sensors) instead of showing a start button
+    if (r.some((x) => x !== 'granted')) return startSession([], { worldTracking: false });
   }
   startSession([]);
 }
-function startSession(asks) {
+function startSession(asks, { worldTracking = true } = {}) {
   if (!(session.state === S.IDLE || session.state === S.ERROR)) return;     // no double start
-  panelWanted = false;
+  panelWanted = false; follow = !worldTracking; posterVisible = false;
   session.send('START');
   begin(asks);
 }
@@ -159,9 +163,9 @@ async function begin(asks) {
     const compat = compatibility(XR8);
     if (!compat.ok) return fail('unsupported', compat);
     try { await targetP; } catch (e) { return fail('network', e); }
-    policy = new AnchorPolicy(config.targetName, config.anchor);
+    policy = new AnchorPolicy(config.targetName, { ...config.anchor, requireTracking: !follow });
     clock = null; attached = false;
-    await runtime.start({ canvas: ui.canvas, targetData, maxPixelRatio: config.render?.maxPixelRatio ?? 1.5 });
+    await runtime.start({ canvas: ui.canvas, targetData, maxPixelRatio: config.render?.maxPixelRatio ?? 1.5, worldTracking: !follow });
   } catch (e) { fail('engine', e); }
 }
 
@@ -182,6 +186,7 @@ assetsP.then(() => { attach(); if (pendingLatch && session.state === S.STABILIZI
 // ---------------- image + tracking events ----------------
 function onImage(type, d) {
   if (!policy) return;
+  if (follow && policy.latched && d?.name === config.targetName) return followPoster(type, d);
   if (type === 'lost') {
     policy.lost(d?.name);
     if (session.state === S.STABILIZING) session.send('TARGET_LOST');
@@ -205,17 +210,35 @@ function onImage(type, d) {
   else if (r.state === 'latched') latch(r.pose);
 }
 
+// image-only mode after placement: ride on the live poster; pause and hide while the poster is out of view
+function followPoster(type, d) {
+  if (type === 'lost') {
+    posterVisible = false; runtime.clearAnchor();
+    if (session.state === S.PLAYING) { clock.pause(); trackingLimitedAt = performance.now(); session.send('TRACKING_LIMITED'); }
+    setStatus(MSG.lostPoster, true);
+    return;
+  }
+  if (!d.scaledWidth) return;
+  runtime.setAnchor({ position: d.position, quaternion: d.rotation, width: d.scale * d.scaledWidth }, config.markerToArtwork);
+  if (!posterVisible) {
+    posterVisible = true;
+    if (session.state === S.TRACKING_PAUSED) { session.send('TRACKING_NORMAL'); clock.start(); }
+    else render();
+  }
+}
+
 function latch(pose) {
   if (!player || !attached) { pendingLatch = pose; setStatus(MSG.loading(pct())); return; }
   pendingLatch = null;
   runtime.setAnchor(pose, config.markerToArtwork);
   clock.reset(); player.setTime(0);
+  posterVisible = true;
   if (session.send('LATCHED')) clock.start();
 }
 
 function onTracking(status, reason) {
   if (QA) window.__qa.tracking.push([status, reason]);
-  if (!policy) return;
+  if (!policy || follow) return;
   policy.setTracking(status, reason);
   const normal = status === 'NORMAL';
   if (session.state === S.PLAYING && !normal) { clock.pause(); trackingLimitedAt = performance.now(); session.send('TRACKING_LIMITED'); }
@@ -247,7 +270,7 @@ ui.replay.addEventListener('click', () => {
   if (session.state !== S.ENDED) return;
   clock.reset(); player.setTime(0);
   session.send('REPLAY');
-  if (policy.trackingReady()) clock.start();
+  if (policy.trackingReady() && (!follow || posterVisible)) clock.start();
   else { trackingLimitedAt = performance.now(); session.send('TRACKING_LIMITED'); }
 });
 ui.home.addEventListener('click', () => {
@@ -262,7 +285,7 @@ ui.app.addEventListener('pointerup', (e) => {
   if (session.state !== S.HOLDING || e.target.closest('button, a')) return;
   if (!clock.continue()) return;
   session.send('TAP');
-  if (policy?.trackingReady()) clock.start();
+  if (policy?.trackingReady() && (!follow || posterVisible)) clock.start();
   else { clock.pause(); trackingLimitedAt = performance.now(); session.send('TRACKING_LIMITED'); }
 });
 
@@ -278,7 +301,7 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) { clock?.pause(); runtime.pause(); }
   else {
     runtime.resume();
-    if (session.state === S.PLAYING && policy?.trackingReady()) clock.start();
+    if (session.state === S.PLAYING && policy?.trackingReady() && (!follow || posterVisible)) clock.start();
   }
 });
 window.addEventListener('pagehide', () => teardown());
