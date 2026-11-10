@@ -170,7 +170,7 @@ function createTile(piece, index, layout, stage, defs, icon, frames) {
   ink.setAttribute('viewBox', `0 0 ${piece.w * frames} ${piece.h}`);
   ink.setAttribute('fill', 'none');
   ink.setAttribute('stroke', '#677680');
-  ink.style.stroke = `color-mix(in srgb, ${icon.color} 55%, #40515c)`;
+  ink.style.stroke = `color-mix(in srgb, ${icon.color} 55%, #d5dbe0)`;
   ink.setAttribute('stroke-width', '3');
   ink.setAttribute('stroke-linejoin', 'round');
   for (let i = frames === 1 ? 0 : 1; i < frames; i++) {
