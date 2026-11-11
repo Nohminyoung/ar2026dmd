@@ -11,12 +11,6 @@ import { ArRuntime, waitForXR8, compatibility } from './ar-runtime.js';
 const $ = (id) => document.getElementById(id);
 // ?qa=1 : QA only. Exposes internals and draws the artwork on the live marker pose (never used to latch).
 const QA = new URLSearchParams(location.search).get('qa') === '1';
-// 전시 모드 (?kiosk=1): fixed exhibition tablet. No homepage/close buttons, returns to the poster search by itself.
-const KIOSK = new URLSearchParams(location.search).get('kiosk') === '1';
-if (KIOSK) {
-  document.documentElement.classList.add('kiosk');
-  const m = document.createElement('link'); m.rel = 'manifest'; m.href = '/kiosk.webmanifest'; document.head.appendChild(m);
-}
 const ui = {
   app: $('app'), canvas: $('camerafeed'), intro: $('intro'),
   hud: $('hud'), status: $('status'), reset: $('reset'), close: $('close'), end: $('end'), replay: $('replay'), home: $('home'),
@@ -33,7 +27,6 @@ const MSG = {
   slowStable: '휴대폰을 천천히 움직여 주변도 함께 비춰 주세요',
   loading: (p) => `작품을 불러오는 중… ${p}%`,
   starting: '카메라를 켜고 있어요…',
-  kioskEnd: '잠시 후 처음으로 돌아가요',
   relocate: '위치가 맞지 않으면 ‘위치 다시 맞추기’를 눌러 주세요',
   tap: () => config?.playback?.tapHint || '화면을 터치하면 포스터로 돌아가요',
 };
@@ -87,31 +80,17 @@ let policy = null, clock = null, attached = false, trackingLimitedAt = 0, pendin
 let follow = false, posterVisible = false;
 const session = new SessionState((next) => { ui.app.dataset.state = next; render(); });
 
-let kioskTimer = 0;
-const K = () => ({ restartAfterMs: 3500, holdTimeoutMs: 25000, lostResetMs: 20000, errorReloadMs: 15000, ...(config?.kiosk || {}) });
-function kioskSchedule(st) {
-  clearTimeout(kioskTimer); kioskTimer = 0;
-  if (!KIOSK) return;
-  const k = K();
-  if (st === S.ENDED) kioskTimer = setTimeout(resetPlacement, k.restartAfterMs);            // back to the poster search, camera stays on
-  else if (st === S.HOLDING) kioskTimer = setTimeout(continueFromHold, k.holdTimeoutMs);    // nobody tapped: finish by itself
-  else if (st === S.TRACKING_PAUSED) kioskTimer = setTimeout(resetPlacement, k.lostResetMs);
-  else if (st === S.ERROR) kioskTimer = setTimeout(() => location.reload(), k.errorReloadMs);
-  else if (st === S.IDLE && panelWanted) kioskTimer = setTimeout(() => startSession([]), k.restartAfterMs);
-}
-
 function render() {
   const st = session.state;
-  kioskSchedule(st);
   ui.intro.hidden = !(st === S.IDLE && panelWanted);
   ui.hud.hidden = !(session.isCamera() || st === S.STARTING);
   if (st === S.STARTING) setStatus(MSG.starting);
-  ui.end.hidden = KIOSK || st !== S.ENDED;
+  ui.end.hidden = st !== S.ENDED;
   ui.error.hidden = st !== S.ERROR;
   ui.reset.classList.remove('attention');
   if (st === S.SCANNING) setStatus(MSG.scanning);
   if (st === S.STABILIZING) setStatus(MSG.found);
-  if (st === S.PLAYING || st === S.ENDED) setStatus(KIOSK && st === S.ENDED ? MSG.kioskEnd : '');
+  if (st === S.PLAYING || st === S.ENDED) setStatus('');
   if (st === S.TRACKING_PAUSED) setStatus(follow ? MSG.lostPoster : MSG.move, true);
   if (st === S.HOLDING) setStatus(MSG.tap());
   ui.status.classList.toggle('tap', st === S.HOLDING);
@@ -281,13 +260,12 @@ function onFrame(now) {
 }
 
 // ---------------- buttons ----------------
-function resetPlacement() {
+ui.reset.addEventListener('click', () => {
   if (!session.isCamera()) return;
   clock?.pause(); clock?.reset(); player?.setTime(0); pendingLatch = null;
   runtime.clearAnchor(); policy?.unlatch();
   session.send('RESET');
-}
-ui.reset.addEventListener('click', resetPlacement);
+});
 ui.replay.addEventListener('click', () => {
   if (session.state !== S.ENDED) return;
   clock.reset(); player.setTime(0);
@@ -305,23 +283,11 @@ ui.close.addEventListener('click', () => { teardown(); session.send('CLOSE'); sh
 // one tap anywhere (except the buttons) while the artwork waits fully expanded -> play the return part
 ui.app.addEventListener('pointerup', (e) => {
   if (session.state !== S.HOLDING || e.target.closest('button, a')) return;
-  continueFromHold();
-});
-function continueFromHold() {
-  if (session.state !== S.HOLDING || !clock.continue()) return;
+  if (!clock.continue()) return;
   session.send('TAP');
   if (policy?.trackingReady() && (!follow || posterVisible)) clock.start();
   else { clock.pause(); trackingLimitedAt = performance.now(); session.send('TRACKING_LIMITED'); }
-}
-
-// 전시 모드: keep the tablet screen on
-let wakeLock = null;
-async function keepAwake() {
-  if (!KIOSK || document.hidden || wakeLock || !navigator.wakeLock) return;
-  try { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => { wakeLock = null; }); } catch { /* not allowed yet */ }
-}
-keepAwake();
-if (KIOSK) for (const t of ['click', 'touchend']) window.addEventListener(t, keepAwake, { capture: true });
+});
 
 function teardown() {
   clock?.pause();
@@ -334,7 +300,6 @@ function teardown() {
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) { clock?.pause(); runtime.pause(); }
   else {
-    keepAwake();
     runtime.resume();
     if (session.state === S.PLAYING && policy?.trackingReady() && (!follow || posterVisible)) clock.start();
   }

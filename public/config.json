@@ -54,12 +54,5 @@
     ],
     "tapHint": "화면을 터치하면 포스터로 돌아가요",
     "note": "Frames are Blender frames of the exported file (30 fps). Part 1 = 등장~14팀 동시 완성, holds fully expanded at frame 301; a tap plays 전체 동시 복귀~포스터만 남음. speed 1.5 = 1.5x faster."
-  },
-  "kiosk": {
-    "restartAfterMs": 3500,
-    "holdTimeoutMs": 25000,
-    "lostResetMs": 20000,
-    "errorReloadMs": 15000,
-    "note": "Only with ?kiosk=1 (exhibition tablet). restartAfterMs: after the end, back to the poster search. holdTimeoutMs: nobody taps the expanded artwork -> it returns by itself. lostResetMs: poster/tracking lost this long -> back to the search. errorReloadMs: reload after an error."
   }
 }
