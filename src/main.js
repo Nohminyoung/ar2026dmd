@@ -102,6 +102,7 @@ function fail(kind, err) {
   const map = {
     motion: ['동작 센서 권한이 필요해요', '아이폰에서 ‘동작 및 방향 접근’을 허용해야 작품을 공간에 고정할 수 있어요. 페이지를 새로고침한 뒤 다시 시작하고, 물어보면 ‘허용’을 눌러 주세요.'],
     camera: ['카메라를 열 수 없어요', '카메라 권한이 꺼져 있거나 다른 앱이 카메라를 쓰고 있어요. 브라우저 설정에서 이 사이트의 카메라를 허용하고, 다른 앱을 닫은 뒤 다시 시도해 주세요.'],
+    desktopSite: ['데스크톱 모드를 꺼 주세요', '태블릿 브라우저가 PC용 화면으로 열려서 AR이 동작하지 않아요. 브라우저 메뉴(⋮ 또는 ≡)에서 ‘데스크톱 사이트’(삼성 인터넷은 ‘데스크톱 버전으로 보기’) 체크를 해제한 뒤 다시 시도해 주세요.'],
     unsupported: ['이 브라우저에서는 AR을 쓸 수 없어요', '아이폰은 iOS 16.4 이상의 Safari, 안드로이드는 최신 Chrome에서 열어 주세요. 운영체제와 브라우저를 업데이트하면 될 수 있어요.'],
     network: ['불러오기에 실패했어요', '인터넷 연결을 확인하고 페이지를 새로고침해 주세요.'],
     engine: ['AR을 시작하지 못했어요', '페이지를 새로고침한 뒤 다시 시도해 주세요.'],
@@ -161,6 +162,10 @@ async function begin(asks) {
     let XR8;
     try { XR8 = await waitForXR8(); } catch (e) { return fail('network', e); }
     const compat = compatibility(XR8);
+    // Android tablets (Samsung etc.): Chrome / Samsung Internet often open sites as "desktop site". The engine then
+    // treats the tablet as a computer (front camera, no poster tracking), so ask to switch that off instead.
+    // (iPad Safari also reports a Mac, but the engine recognizes it as an iPad and runs normally.)
+    if (!compat.ok && navigator.maxTouchPoints > 0 && !/Android|iPhone|iPad/i.test(navigator.userAgent)) return fail('desktopSite', compat);
     if (!compat.ok) return fail('unsupported', compat);
     try { await targetP; } catch (e) { return fail('network', e); }
     policy = new AnchorPolicy(config.targetName, { ...config.anchor, requireTracking: !follow });
@@ -170,6 +175,7 @@ async function begin(asks) {
 }
 
 function onCameraStatus(status, reason) {
+  if (QA) console.info('[AR] camera', status, reason ?? '');
   if (status === 'hasStream' && session.state === S.STARTING) session.send('CAMERA_READY');
   if (status === 'failed') fail('camera', { reasons: reason ? [String(reason)] : [] });
 }

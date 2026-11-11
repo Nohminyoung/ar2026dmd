@@ -10,10 +10,12 @@ export function waitForXR8(timeoutMs = 30000) {
   });
 }
 
-export function compatibility(XR8) {
+// device: 'MOBILE' (phones, tablets in mobile mode) or 'ANY' (also tablets whose browser says it is a computer)
+export function compatibility(XR8, device = 'MOBILE') {
   try {
-    const ok = XR8.XrDevice.isDeviceBrowserCompatible({ allowedDevices: XR8.XrConfig.device().MOBILE });
-    const reasons = ok ? [] : (XR8.XrDevice.incompatibleReasons?.({ allowedDevices: XR8.XrConfig.device().MOBILE }) || []);
+    const allowedDevices = XR8.XrConfig.device()[device];
+    const ok = XR8.XrDevice.isDeviceBrowserCompatible({ allowedDevices });
+    const reasons = ok ? [] : (XR8.XrDevice.incompatibleReasons?.({ allowedDevices }) || []);
     return { ok, reasons };
   } catch (e) { return { ok: true, reasons: [], note: String(e) }; }
 }
@@ -74,7 +76,9 @@ export class ArRuntime {
       // so measuring the canvas would grow it by the pixel ratio on every start (the camera kept zooming in)
       const box = (canvas.parentElement || document.documentElement).getBoundingClientRect();
       const vw = box.width || window.innerWidth, vh = box.height || window.innerHeight;
-      const w = Math.round(vw * r), h = Math.round(vh * r);
+      // big tablet screens: cap the drawing size (~2.4 MP) so the GPU keeps up
+      const k = Math.min(1, Math.sqrt(2.4e6 / Math.max(1, vw * r * vh * r)));
+      const w = Math.round(vw * r * k), h = Math.round(vh * r * k);
       canvas.style.width = '100%'; canvas.style.height = '100%';
       if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
     };
