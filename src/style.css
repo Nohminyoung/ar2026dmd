@@ -104,3 +104,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--ink); outline-o
 .intro > .credit { margin: 0; padding: 0 16px calc(12px + var(--safe-b)); text-align: center; }
 /* camera warm-up: show the status pill, hide the reset button until the camera is on */
 #app[data-state="STARTING"] #reset { visibility: hidden; }
+
+/* 전시 모드 (?kiosk=1): visitors can't close the camera; the end sheet is replaced by an automatic restart */
+.kiosk #close { visibility: hidden; }
