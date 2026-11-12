@@ -35,7 +35,7 @@ export class ArRuntime {
     if (this.running) return;
     const XR8 = await waitForXR8();
     window.THREE = THREE;                                  // XR8.Threejs expects a global THREE
-    XR8.XrController.configure({ disableWorldTracking: !worldTracking, scale: worldTracking ? 'absolute' : 'responsive', imageTargetData: [targetData] });
+    XR8.XrController.configure({ disableWorldTracking: !worldTracking, scale: worldTracking ? 'absolute' : 'responsive', imageTargetData: Array.isArray(targetData) ? targetData : [targetData] });
     if (XR8.Threejs.configure) XR8.Threejs.configure({ renderCameraTexture: false }); // GlTextureRenderer draws the camera once
     const self = this;
     const forward = (type) => ({ detail }) => self.h.onImage?.(type, detail);

@@ -1,9 +1,5 @@
 {
-  "targetName": "poster-target",
-  "targetJsonUrl": "/image-targets/poster-target.json",
-  "markerImageUrl": "/image-targets/poster-target_cropped.png",
   "isTestMarker": false,
-  "markerSource": "input/poster_final_RGB.pdf (600 x 900 mm document) rasterized 1200 x 1800, CLI default centered 3:4 crop (top 100, height 1600)",
   "homepageUrl": "https://www.dmd2026.com/",
   "productionUrl": null,
   "plannedProductionUrl": "https://ar.dmd2026.com/",
@@ -11,20 +7,6 @@
   "markerPhysicalHeight": null,
   "markerPhysicalNote": "Not needed: the poster itself is the target; the artwork is scaled from the detected target width. PDF document size is 600 x 900 mm, actual print size unconfirmed.",
   "artworkReferenceWidth": 1.0,
-  "markerToArtwork": {
-    "position": [
-      -5e-05,
-      -0.0003,
-      0.0
-    ],
-    "rotationDeg": [
-      0,
-      0,
-      0
-    ],
-    "scale": 1.0052,
-    "source": "scripts/fit-alignment.py: SIFT/RANSAC fit of the Blender poster onto the final print, 2176 inliers, median residual 0.1 px. Crop center = print center."
-  },
   "anchor": {
     "stableWindowMs": 650,
     "minSamples": 3,
@@ -54,5 +36,45 @@
     ],
     "tapHint": "화면을 터치하면 포스터로 돌아가요",
     "note": "Frames are Blender frames of the exported file (30 fps). Part 1 = 등장~14팀 동시 완성, holds fully expanded at frame 301; a tap plays 전체 동시 복귀~포스터만 남음. speed 1.5 = 1.5x faster."
-  }
+  },
+  "targets": [
+    {
+      "name": "poster-target",
+      "label": "포스터 (600×900 세로형, poster_final_RGB.pdf)",
+      "jsonUrl": "/image-targets/poster-target.json",
+      "markerToArtwork": {
+        "position": [
+          -5e-05,
+          -0.0003,
+          0.0
+        ],
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "scale": 1.0052,
+        "source": "scripts/fit-alignment.py: SIFT/RANSAC fit of the Blender poster onto the final print, 2176 inliers, median residual 0.1 px. Crop center = print center."
+      }
+    },
+    {
+      "name": "poster-target-2",
+      "label": "AR용 포스터 (가로세로 약 0.87, poster2_AR.pdf)",
+      "jsonUrl": "/image-targets/poster-target-2.json",
+      "markerToArtwork": {
+        "position": [
+          -0.00399,
+          -0.00114,
+          0.0
+        ],
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "scale": 0.85014,
+        "source": "scripts/fit-alignment.py on the cropped target (CLI default centered 3:4 crop, left 84 width 1032 of 1200x1376): 962 inliers, median residual 0.08 px"
+      }
+    }
+  ]
 }

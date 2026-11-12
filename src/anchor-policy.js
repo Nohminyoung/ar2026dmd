@@ -7,8 +7,9 @@ const deg = (q1, q2) => {
 };
 const finite = (...v) => v.every((x) => typeof x === 'number' && Number.isFinite(x));
 
+const has = (names, n) => (Array.isArray(names) ? names.includes(n) : names === n);
 export function validPose(d, targetName) {
-  if (!d || d.name !== targetName) return false;
+  if (!d || !has(targetName, d.name)) return false;
   const p = d.position, r = d.rotation;
   return !!p && !!r && finite(p.x, p.y, p.z, r.x, r.y, r.z, r.w, d.scale, d.scaledWidth) && d.scale > 0 && d.scaledWidth > 0;
 }
@@ -31,15 +32,19 @@ export class AnchorPolicy {
   // requireTracking:false = image-only mode (no world tracking): the poster itself is the only reference
   trackingReady() { return !this.o.requireTracking || (this.tracking.status === 'NORMAL' && this.tracking.reason !== 'INITIALIZING'); }
 
-  lost(name) { if (!this.latched && (!name || name === this.targetName)) this.samples = []; }
+  // Several targets can carry the same artwork, and the engine may then report all of them for one poster.
+  // Stabilize on the first one seen (the focus) and ignore the others until it is lost.
+  get focus() { return this.samples[0]?.name ?? null; }
+  isFocus(name) { return !this.focus || name === this.focus; }
+  lost(name) { if (!this.latched && (!name || name === this.focus)) this.samples = []; }
 
   /** Feed an imagefound / imageupdated detail. Returns
    *  {state:'ignored'|'waiting-tracking'|'stabilizing'|'latched', pose?} ; 'latched' is returned exactly once. */
   observe(d, nowMs) {
     if (this.latched) return { state: 'ignored' };
-    if (!validPose(d, this.targetName)) return { state: 'ignored' };
+    if (!validPose(d, this.targetName) || !this.isFocus(d.name)) return { state: 'ignored' };
     const s = {
-      t: nowMs,
+      t: nowMs, name: d.name,
       p: { x: d.position.x, y: d.position.y, z: d.position.z },
       q: { x: d.rotation.x, y: d.rotation.y, z: d.rotation.z, w: d.rotation.w },
       width: d.scale * d.scaledWidth,
@@ -59,7 +64,7 @@ export class AnchorPolicy {
     const span = s.t - this.samples[0].t;
     if (this.samples.length >= this.o.minSamples && span >= this.o.stableWindowMs) {
       this.latched = true;
-      this.pose = { position: s.p, quaternion: s.q, width: s.width, at: nowMs };
+      this.pose = { position: s.p, quaternion: s.q, width: s.width, at: nowMs, name: s.name };
       return { state: 'latched', pose: this.pose };
     }
     return { state: 'stabilizing', progress: Math.min(1, span / this.o.stableWindowMs) };

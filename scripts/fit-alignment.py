@@ -1,8 +1,12 @@
 """Fit a similarity transform (uniform scale + offset, no rotation expected) that maps the Blender
 poster plane (the artwork's own poster, packed poster.jpg) onto the final print image.
-Writes qa/alignment/alignment.json and an overlay preview. python3 scripts/fit-alignment.py"""
-import cv2, json, numpy as np, sys
-blend_img = 'public/assets/poster.jpg'; final_img = 'input/poster_final_1200.png'
+Writes qa/alignment/alignment.json and an overlay preview. python3 scripts/fit-alignment.py
+Second target: python3 scripts/fit-alignment.py public/image-targets/poster-target-2_cropped.png qa/alignment/target-2
+(fit against the CROPPED target image: its width and center are exactly what the engine reports)"""
+import cv2, json, numpy as np, sys, os
+blend_img = 'public/assets/poster.jpg'
+final_img = sys.argv[1] if len(sys.argv) > 1 else 'input/poster_final_1200.png'
+out_dir = sys.argv[2] if len(sys.argv) > 2 else 'qa/alignment'; os.makedirs(out_dir, exist_ok=True)
 man = json.load(open('public/assets/manifest.json')); pp = man['posterPlane']
 A = cv2.imread(blend_img, cv2.IMREAD_GRAYSCALE); B = cv2.imread(final_img, cv2.IMREAD_GRAYSCALE)
 sift = cv2.SIFT_create(8000)
@@ -25,8 +29,8 @@ out = {'blenderPoster': blend_img, 'finalPrint': final_img, 'matches': len(good)
        'scale': scale, 'rotationDeg': rot, 'offset': o.tolist(), 'residualPx': {'median': float(np.median(res)), 'p90': float(np.percentile(res, 90))},
        'finalPrintAspect': hb / wb,
        'meaning': 'artwork point p (Blender units, poster width 1) -> print point = offset + scale * p, in print widths, centered, y up'}
-json.dump(out, open('qa/alignment/alignment.json', 'w'), indent=1)
+json.dump(out, open(f'{out_dir}/alignment.json', 'w'), indent=1)
 warp = cv2.warpAffine(cv2.imread(blend_img), M, (wb, hb))
 over = cv2.addWeighted(cv2.imread(final_img), 0.5, warp, 0.5, 0)
-cv2.imwrite('qa/alignment/overlay.jpg', cv2.resize(over, (600, 900)))
+cv2.imwrite(f'{out_dir}/overlay.jpg', cv2.resize(over, (600, round(600 * hb / wb))))
 print(json.dumps(out, indent=1))

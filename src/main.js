@@ -34,7 +34,13 @@ const MSG = {
 // ---------------- config + assets (start downloading immediately) ----------------
 let config = null, targetData = null, player = null, assetsError = null, loadedBytes = 0, totalBytes = 0;
 const configP = fetch('/config.json').then((r) => r.json()).then((c) => { config = c; return c; });
-const targetP = configP.then((c) => fetch(c.targetJsonUrl)).then((r) => { if (!r.ok) throw new Error('target'); return r.json(); }).then((t) => (targetData = t));
+// image targets: config.targets = [{ name, jsonUrl, markerToArtwork }] (any of them starts the artwork)
+const targetsOf = (c) => c.targets?.length ? c.targets : [{ name: c.targetName, jsonUrl: c.targetJsonUrl, markerToArtwork: c.markerToArtwork }];
+const targetP = configP.then((c) => Promise.all(targetsOf(c).map((t) => fetch(t.jsonUrl).then((r) => { if (!r.ok) throw new Error('target ' + t.name); return r.json(); }))))
+  .then((list) => (targetData = list));
+const TARGET_NAMES = () => targetsOf(config).map((t) => t.name);
+const alignFor = (name) => (targetsOf(config).find((t) => t.name === name) || targetsOf(config)[0]).markerToArtwork;
+let activeTarget = null;   // the target the artwork is placed on
 const assetsP = (async () => {
   const head = await fetch('/assets/manifest.json').then((r) => r.json());
   totalBytes = head.bodies.packed.bytes + Object.values(head.animation).reduce((s, a) => s + a.bytes, 0) + head.tips.geometry.bytes;
@@ -168,7 +174,7 @@ async function begin(asks) {
     if (!compat.ok && navigator.maxTouchPoints > 0 && !/Android|iPhone|iPad/i.test(navigator.userAgent)) return fail('desktopSite', compat);
     if (!compat.ok) return fail('unsupported', compat);
     try { await targetP; } catch (e) { return fail('network', e); }
-    policy = new AnchorPolicy(config.targetName, { ...config.anchor, requireTracking: !follow });
+    policy = new AnchorPolicy(TARGET_NAMES(), { ...config.anchor, requireTracking: !follow });
     clock = null; attached = false;
     await runtime.start({ canvas: ui.canvas, targetData, maxPixelRatio: config.render?.maxPixelRatio ?? 1.5, worldTracking: !follow });
   } catch (e) { fail('engine', e); }
@@ -191,16 +197,19 @@ assetsP.then(() => { attach(); if (pendingLatch && session.state === S.STABILIZI
 
 // ---------------- image + tracking events ----------------
 function onImage(type, d) {
+  if (QA) { const l = (window.__qa.imgLog ||= []); l.push([type, d?.name, Math.round(performance.now()), d?.scaledWidth && +(d.scale * d.scaledWidth).toFixed(4), d?.position && [+d.position.x.toFixed(4), +d.position.y.toFixed(4), +d.position.z.toFixed(4)], window.__qa.policy?.samples?.length]); if (l.length > 40) l.shift(); }
   if (!policy) return;
-  if (follow && policy.latched && d?.name === config.targetName) return followPoster(type, d);
+  if (follow && policy.latched && d?.name === activeTarget) return followPoster(type, d);
   if (type === 'lost') {
+    if (policy.latched || !policy.isFocus(d?.name)) return;      // another poster's name for the same artwork
     policy.lost(d?.name);
     if (session.state === S.STABILIZING) session.send('TARGET_LOST');
     return;
   }
   if (QA) { window.__qa.lastImage = { type, d: JSON.parse(JSON.stringify(d)), t: performance.now() };
-    if (!policy.latched && player && attached && d.scaledWidth) { runtime.setAnchor({ position: d.position, quaternion: d.rotation, width: d.scale * d.scaledWidth }, config.markerToArtwork); player.setTime(0); } }
+    if (!policy.latched && player && attached && d.scaledWidth) { runtime.setAnchor({ position: d.position, quaternion: d.rotation, width: d.scale * d.scaledWidth }, alignFor(d.name)); player.setTime(0); } }
   if (policy.latched) return;                                  // placement is decided once
+  if (!policy.isFocus(d.name)) return;                         // same artwork reported under the other poster's name
   if (session.state === S.SCANNING) session.send('TARGET_SEEN');
   if (session.state !== S.STABILIZING) return;
   // distance check: the whole animation needs room in front of the poster
@@ -225,7 +234,7 @@ function followPoster(type, d) {
     return;
   }
   if (!d.scaledWidth) return;
-  runtime.setAnchor({ position: d.position, quaternion: d.rotation, width: d.scale * d.scaledWidth }, config.markerToArtwork);
+  runtime.setAnchor({ position: d.position, quaternion: d.rotation, width: d.scale * d.scaledWidth }, alignFor(d.name));
   if (!posterVisible) {
     posterVisible = true;
     if (session.state === S.TRACKING_PAUSED) { session.send('TRACKING_NORMAL'); clock.start(); }
@@ -235,8 +244,8 @@ function followPoster(type, d) {
 
 function latch(pose) {
   if (!player || !attached) { pendingLatch = pose; setStatus(MSG.loading(pct())); return; }
-  pendingLatch = null;
-  runtime.setAnchor(pose, config.markerToArtwork);
+  pendingLatch = null; activeTarget = pose.name;
+  runtime.setAnchor(pose, alignFor(pose.name));
   clock.reset(); player.setTime(0);
   posterVisible = true;
   if (session.send('LATCHED')) clock.start();

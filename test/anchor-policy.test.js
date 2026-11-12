@@ -48,3 +48,14 @@ test('image-only mode latches without world tracking', () => {
   let r; for (let t = 0; t <= 800; t += 100) r = p.observe(d, t);
   assert.equal(r.state, 'ignored'); assert.ok(p.latched); assert.ok(p.trackingReady());
 });
+
+test('two posters with the same artwork: both reported at once -> stabilize on the first one only', () => {
+  const p = new AnchorPolicy(['poster-target', 'poster-target-2'], { requireTracking: false });
+  const mk = (name, y) => ({ name, position: { x: 0, y, z: 0 }, rotation: { x: 0, y: 0, z: 0, w: 1 }, scale: 1, scaledWidth: 0.46 });
+  assert.equal(p.observe(mk('other', 1), 0).state, 'ignored');
+  for (let t = 0; t <= 800; t += 100) { p.observe(mk('poster-target-2', 1.315), t); assert.equal(p.observe(mk('poster-target', 1.19), t).state, p.latched ? 'ignored' : 'ignored'); }
+  assert.ok(p.latched); assert.equal(p.pose.name, 'poster-target-2');
+  const q = new AnchorPolicy(['poster-target', 'poster-target-2'], { requireTracking: false });
+  q.observe(mk('poster-target', 1.19), 0); q.lost('poster-target-2'); assert.equal(q.samples.length, 1);   // other target lost: no effect
+  q.lost('poster-target'); assert.equal(q.samples.length, 0); assert.equal(q.focus, null);
+});

@@ -107,3 +107,16 @@ CLI 입력: 평면(flat), 기본 중앙 크롭(3:4, 위 100px부터 높이 1600p
 - 아이패드: Safari 그대로 됩니다(엔진이 아이패드로 인식, 후면 카메라).
 - 삼성 등 안드로이드 태블릿: Chrome·삼성 인터넷이 ‘데스크톱 사이트’로 열면 엔진이 PC로 판단해 AR이 안 됩니다. 이때는 ‘데스크톱 모드를 꺼 주세요’ 안내가 뜹니다. 메뉴에서 ‘데스크톱 사이트’(삼성 인터넷: ‘데스크톱 버전으로 보기’) 체크를 해제하면 폰과 똑같이 동작합니다.
 - 큰 화면은 그리는 해상도를 약 240만 화소로 제한해 속도를 지킵니다.
+
+
+## 인식 이미지 여러 개 (`config.targets`)
+
+- `poster-target`: 세로형 포스터(`input/poster_final_RGB.pdf`)
+- `poster-target-2`: AR용 포스터(`input/poster2_AR.pdf`, 가로세로 약 0.87)
+  ```sh
+  pdftoppm -r 21.07 -png -singlefile input/poster2_AR.pdf input/new-target/poster2   # → 1200 폭으로 줄여 input/poster2_1200.png
+  printf '%s\n' input/poster2_1200.png 1 y public/image-targets poster-target-2 | OVERWRITE_FILES=true npx --no-install image-target-cli
+  python3 scripts/fit-alignment.py public/image-targets/poster-target-2_cropped.png qa/alignment/target-2   # 962 inliers, 0.08px
+  ```
+- 둘 중 어느 것을 비춰도 작품이 나옵니다. 같은 작품이라 엔진이 두 이름을 동시에 알려 줄 수 있어서, 처음 잡힌 쪽에 맞춰 위치를 정합니다(어느 쪽이든 작품 위치는 같음).
+- 위치 보정(`markerToArtwork`)은 잘린 타깃 이미지(3:4) 기준입니다.
